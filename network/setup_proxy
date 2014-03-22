@@ -1,0 +1,32 @@
+#This is an example for setup proxy
+
+1. you must have a remote server which can visit specified websites.
+
+2. use ssh
+
+   ssh -qTfnN -D localport -p sshport user@host
+
+   run command 'man ssh' for details.
+
+3. web browser setting
+
+   use 'auto proxy config' option and choose a pac file
+
+   you must specify the file's url and i use nginx,so it's easy.
+
+4. pac example file(use javascipt syntax)
+
+   function FindProxyForURL(url,host)
+   {
+	url = url.toLowerCase();
+   	host = host.toLowerCase();
+ 
+	proxy = "SOCKS 127.0.0.1:8888";//the address and port must correspond to option's values in ssh
+
+    	remote_hosts = ["*.facebook.com*","*.google.com*","*.youtobe.com*","*.twitter.com*","*.slideshare.net*"];
+
+    	for(i in remote_hosts){
+      	      if(shExpMatch(host, remote_hosts[i])) return proxy;
+    	}
+    	return "DIRECT";
+   }
