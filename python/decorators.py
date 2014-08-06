@@ -29,11 +29,31 @@ def show_name2address(v):
                                       getattr(v, '__name__', ''), id(v))
 
 
+def test_case(test_fun):
+
+    '''
+    A test case for function call.
+
+    '''
+
+    def wrap():
+
+        print ('\n============= start testing %s function ======'
+               '==========\n' % test_fun.__name__)
+
+        test_fun()
+
+        print ('\n============ end testing %s function ========'
+               '==========\n' % test_fun.__name__)
+
+    return wrap
+
+
 def no_argument_decorator():
 
     '''
     function decorator with one arguments.
-    Usage example
+    Usage example:
     >>> @no_argument_decorator()
     >>> def your_function(*args):
     >>>     write your own code
@@ -61,74 +81,89 @@ def no_argument_decorator():
     return wrap
 
 
-try:
+@test_case
+def test_noarg_decorator_case():
 
     '''
     test no_argument_decorator with no argument for function
 
     '''
+    try:
 
-    @no_argument_decorator()
-    def test_no_argument_decorator(*args):
+        @no_argument_decorator()
+        def test_no_argument_decorator(*args):
 
-        print 'execute in test_no_argument_decorator'
+            print 'execute in test_no_argument_decorator'
 
-        print args
+            print args
 
-except Exception, e:
+    except Exception, e:
 
-    print e
-# The name and address of test_no_argument_decorator function has been changed
+        print e
 
-show_name2address(test_no_argument_decorator)
-# really, perform as invoking innerwrap functio
-test_no_argument_decorator(*[1, 'justdoit', 'programer'])
+    # The address of test_no_argument_decorator function has been changed
+
+    show_name2address(test_no_argument_decorator)
+
+    # really, perform as invoking innerwrap functio
+
+    test_no_argument_decorator(*[1, 'justdoit', 'programer'])
 
 
-try:
+@test_case
+def test_noarg_decorator_class_case():
 
     '''
     test no_argument_decorator with no argument for class
 
     '''
+    try:
 
-    @no_argument_decorator()
-    class test_no_argument_decorator_class():
+        @no_argument_decorator()
+        class test_no_argument_decorator_class():
 
-        def __init__(self, *args):
+            def __init__(self, *args):
 
-            print 'init in test_no_argument_decorator_class'
+                print 'init in test_no_argument_decorator_class'
+
+                print args
+    except Exception, e:
+
+        print e
+
+    show_name2address(test_no_argument_decorator_class)
+
+    test_no = test_no_argument_decorator_class(*(1, 2, 3))
+
+    show_name2address(test_no)
+
+
+@test_case
+def test_noexplicitarg_decorator():
+
+    '''
+    Test no argument decorator with no explicit argument.
+
+    '''
+
+    try:
+
+        @no_argument_decorator
+        def test_no_explicit_argument_decorator(*args):
+
+            print 'execute in test_no_explicit_argument_decorator'
 
             print args
-except Exception, e:
+    except Exception, e:
 
-    print e
-
-show_name2address(test_no_argument_decorator_class)
-
-test_no = test_no_argument_decorator_class(*(1, 2, 3))
-
-show_name2address(test_no)
-
-
-try:
-
-    @no_argument_decorator
-    def test_no_explicit_argument_decorator(*args):
-
-        print 'execute in test_no_explicit_argument_decorator'
-
-        print args
-except Exception, e:
-
-    print e
+        print e
 
 
 def single_argument_decorator(fun):
 
     '''
     function decorator with one single arguments.
-    Usage example
+    Usage example:
     >>> @single_argument_decorator(default=below funtion)
     >>> def your_function(*args):
     >>>     write your own code
@@ -144,35 +179,47 @@ def single_argument_decorator(fun):
 
     return wrap
 
-try:
 
-    @single_argument_decorator
-    def test_single_argument_decorator(x):
+@test_case
+def test_singlearg_decorator_case():
 
-        return x**2
-except Exception, e:
+    try:
 
-    print e
+        @single_argument_decorator
+        def test_single_argument_decorator(x):
 
-print test_single_argument_decorator(3)
+            return x**2
+    except Exception, e:
+
+        print e
+
+    print test_single_argument_decorator(3)
 
 
-try:
+@test_case
+def test_single_explicit_noarg_decorator_case():
 
-    @single_argument_decorator()
-    def test_one_explicitno_argument_decorator(x):
+    '''
+    Test when single argument decorator is called with explicit no argument.
 
-        return 2*x
-except Exception, e:
+    '''
 
-    print e
+    try:
+
+        @single_argument_decorator()
+        def test_single_explicitno_argument_decorator(x):
+
+            return 2*x
+    except Exception, e:
+
+        print e
 
 
 def multi_arguments_decorator(fun, arg):
 
     '''
     function decorator with multi arguments.
-    Usage example
+    Usage example:
     >>> @multi_arguments_decorator(fun, arg)
     >>> def your_function(*args):
     >>>     write your own code
@@ -197,18 +244,49 @@ def multi_arguments_decorator(fun, arg):
 
     return wrap
 
-try:
 
-    @multi_arguments_decorator(123, 'abc')
-    def test_multi_arguments_decorator(s):
+@test_case
+def test_multiargs_decorator_case():
 
-        print s
+    '''
+    Test function decorator with multi arguments.
 
-except Exception, e:
+    '''
 
-    print e
+    try:
 
-print test_multi_arguments_decorator('def')
+        @multi_arguments_decorator(123, 'abc')
+        def test_multi_arguments_decorator(s):
+
+            print s
+
+    except Exception, e:
+
+        print e
+
+    print test_multi_arguments_decorator('def')
+
+
+@test_case
+def test_noexplicitargs_decorator_case():
+
+    '''
+    Test function decorator without explicit arguments.
+
+    '''
+
+    try:
+
+        @multi_arguments_decorator
+        def test_multi_arguments_decorator(s):
+
+            print s
+
+    except Exception, e:
+
+        print 'class decorator error!'
+
+        print e
 
 
 class no_argument_class_decorator(object):
@@ -242,32 +320,35 @@ class no_argument_class_decorator(object):
 
         return wrap
 
-try:
+
+@test_case
+def test_noarg_class_decorator_case():
 
     '''
     test function with no_argument_class_decorator.
 
     '''
+    try:
 
-    @no_argument_class_decorator
-    def test_no_argument_class_decorator(s):
+        @no_argument_class_decorator
+        def test_no_argument_class_decorator(s):
 
-        return [x[:-2] for x in s]
+            return [x[:-2] for x in s]
 
-except Exception, e:
+    except Exception, e:
 
-    print 'class decorator error'
+        print 'class decorator error'
 
-    print e
+        print e
 
-show_name2address(test_no_argument_class_decorator)
+    show_name2address(test_no_argument_class_decorator)
 
-test_no_argument_class_decorator(*('justdoit', 'basketball player'))
+    test_no_argument_class_decorator(*('justdoit', 'basketball player'))
 
-
+'''
 def property_decorator(fun, *args):
 
-    '''
+
     A property decorator for class object.
     Usage for example:
     >>> class A():
@@ -275,13 +356,13 @@ def property_decorator(fun, *args):
     >>>     def class_fun(self):
     >>>         return 'class function'
 
-    '''
 
     print 'execute in property decorator'
 
     print fun, dir(fun), fun.func_globals, args
 
     return fun(fun.im_self)
+'''
 
 
 class property_decorator_class(object):
@@ -342,10 +423,45 @@ class test_property_decorator():
 
         return self._s
 
-tpd = test_property_decorator("mytest")
 
-print test_property_decorator.svalue, tpd.svalue
+@test_case
+def test_property_decorator_case():
 
-tpd._s = "new mytest"
+    '''
+    Test self-implement property class
 
-print tpd.svalue
+    '''
+
+    tpd = test_property_decorator("mytest")
+
+    print test_property_decorator.svalue, "tpd's value is %s" % tpd.svalue
+
+    tpd._s = "new mytest"
+
+    print "tpd's new value is %s" % tpd.svalue
+
+
+def main():
+
+    test_noarg_decorator_case()
+
+    test_noarg_decorator_class_case()
+
+    test_noexplicitarg_decorator()
+
+    test_singlearg_decorator_case()
+
+    test_single_explicit_noarg_decorator_case()
+
+    test_multiargs_decorator_case()
+
+    test_noexplicitargs_decorator_case()
+
+    test_noarg_class_decorator_case()
+
+    test_property_decorator_case()
+
+
+if __name__ == '__main__':
+
+    main()
