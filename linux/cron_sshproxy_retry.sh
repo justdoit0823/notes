@@ -29,4 +29,49 @@ function detection()
     fi
 }
 
+function usage()
+{
+
+    echo -e "usage: ./cron_sshproxy_retry.sh -D [ local_port ] -p [ ssh_porxy_port ] -u [ ssh_user ] -H [ ssh_host ]"
+
+    exit 0
+
+}
+
+LOCAL_PORT=8888
+
+SSH_PROXY_PORT=22122
+
+SSH_USER='justdoit'
+
+SSH_HOST='shareyou.net.cn'
+
+# parse command arguments
+
+while getopts 'hDpuH' opts ; do
+
+    case "${opts}" in
+
+	h)
+	    usage ;;
+
+	D)
+	    LOCAL_PORT=$OPTARG ;;
+
+	p)
+	    SSH_PROXY_PORT=$OPTARG ;;
+
+	u)
+	    SSH_USER=$OPTARG ;;
+	H)
+	    SSH_HOST=$OPTARG ;;
+
+    esac
+
+done
+
+SSH_PROXY_CMD="ssh -qTfnN -D ${LOCAL_PORT} -p ${SSH_PROXY_PORT} ${SSH_USER}@${SSH_HOST}"
+
+#echo "$SSH_PROXY_CMD"
+
 detection
