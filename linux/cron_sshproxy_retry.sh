@@ -10,7 +10,7 @@ function start_ssh_proxy()
 {
     echo 'start ssh proxy connection'
 
-    ssh -qTfnN -D 8888 -p 22122 justdoit@shareyou.net.cn
+    eval $SSH_PROXY_CMD
 
 }
 
