@@ -17,7 +17,7 @@ function start_ssh_proxy()
 {
     #echo 'start ssh proxy connection'
 
-    ssh -qTfnN -D 8888 -p 22122 justdoit@shareyou.net.cn
+    #ssh -qTfnN -D 8888 -p 22122 justdoit@shareyou.net.cn
 
     if [ `uname -a|cut -f 1 -d ' '` == "Linux" ] ; then
 
@@ -38,6 +38,7 @@ function detection()
     if $(kill -0 "$PID" > /dev/null 2>&1) ; then
 
 	#echo 'ssh proxy connection already exists.'
+	exit 0
 
     else
 
