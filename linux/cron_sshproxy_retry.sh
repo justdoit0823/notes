@@ -15,7 +15,7 @@ function get_ssh_authsock()
 
 function start_ssh_proxy()
 {
-    echo 'start ssh proxy connection'
+    #echo 'start ssh proxy connection'
 
     ssh -qTfnN -D 8888 -p 22122 justdoit@shareyou.net.cn
 
@@ -37,7 +37,7 @@ function detection()
 
     if $(kill -0 "$PID" > /dev/null 2>&1) ; then
 
-	echo 'ssh proxy connection already exists.'
+	#echo 'ssh proxy connection already exists.'
 
     else
 
