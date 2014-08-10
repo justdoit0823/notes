@@ -6,11 +6,28 @@
 SSH_PROXY_CMD="ssh -qTfnN -D 8888 -p 22122 justdoit@shareyou.net.cn"
 
 
+function get_ssh_authsock()
+{
+
+    echo /run/user/*/key*/ssh
+
+}
+
 function start_ssh_proxy()
 {
     echo 'start ssh proxy connection'
 
-    eval $SSH_PROXY_CMD
+    ssh -qTfnN -D 8888 -p 22122 justdoit@shareyou.net.cn
+
+    if [ `uname -a|cut -f 1 -d ' '` == "Linux" ] ; then
+
+	eval 'SSH_AUTH_SOCK=`get_ssh_authsock`' $SSH_PROXY_CMD
+
+    else
+
+	eval $SSH_PROXY_CMD
+
+    fi
 
 }
 
