@@ -15,6 +15,14 @@ class your_class():
 
 And the callable object can be a funtion, class object.
 
+The gramar may do like this:
+
+your_method = a_callable_object(your_method)
+
+you_class = a_callable_object(your_class)
+
+It will do a previous name linking to a new object.
+
 '''
 
 
@@ -52,7 +60,7 @@ def test_case(test_fun):
 def no_argument_decorator():
 
     '''
-    function decorator with one arguments.
+    function decorator with no argument.
     Usage example:
     >>> @no_argument_decorator()
     >>> def your_function(*args):
@@ -66,6 +74,44 @@ def no_argument_decorator():
 
         show_name2address(fun)
 
+        def innerwrap(*args):
+
+            print 'execute in innerwrap'
+
+            return fun(*args)
+
+        show_name2address(innerwrap)
+
+        return innerwrap
+
+    show_name2address(wrap)
+
+    return wrap
+
+
+def no_argument_withwraps_decorator():
+
+    '''
+    function decorator with no argument.
+    Usage example:
+    >>> @no_argument_decorator()
+    >>> def your_function(*args):
+    >>>     write your own code
+    At this time, you can't use as @no_argument_decorator,
+    because your decorator function has no argument and
+    decorator must callback with your_function as an argument.
+    With the wraps decorator, you can see how and what the attributes of
+    decorated function change.
+
+    '''
+
+    from functools import wraps
+
+    def wrap(fun):
+
+        show_name2address(fun)
+
+        @wraps(fun)
         def innerwrap(*args):
 
             print 'execute in innerwrap'
@@ -97,6 +143,9 @@ def test_noarg_decorator_case():
 
             print args
 
+        print (test_no_argument_decorator.__dict__,
+               test_no_argument_decorator.__name__)
+
     except Exception, e:
 
         print e
@@ -108,6 +157,38 @@ def test_noarg_decorator_case():
     # really, perform as invoking innerwrap functio
 
     test_no_argument_decorator(*[1, 'justdoit', 'programer'])
+
+
+@test_case
+def test_noarg_withwraps_decorator_case():
+
+    '''
+    test no_argument_decorator with no argument for function
+
+    '''
+    try:
+
+        @no_argument_withwraps_decorator()
+        def test_no_argument_withwraps_decorator(*args):
+
+            print 'execute in test_no_argument_decorator'
+
+            print args
+
+        print (test_no_argument_withwraps_decorator.__dict__,
+               test_no_argument_withwraps_decorator.__name__)
+
+    except Exception, e:
+
+        print e
+
+    # The address of test_no_argument_decorator function has been changed
+
+    show_name2address(test_no_argument_withwraps_decorator)
+
+    # really, perform as invoking innerwrap functio
+
+    test_no_argument_withwraps_decorator(*[1, 'justdoit', 'programer'])
 
 
 @test_case
@@ -441,9 +522,96 @@ def test_property_decorator_case():
     print "tpd's new value is %s" % tpd.svalue
 
 
+'''
+In python, we may use the multi levels decorators for different
+
+decoration work.And the decorator order starts at definition of
+
+function or class object from down to up.We can this in the
+
+following example.Like this:
+
+@decorator_b
+@decorator_a
+def myfunction():
+
+  do_my_work
+
+-----decoration order-----
+
+@decorator_a
+def myfunction():
+
+  do_my_work
+
+After this, a new function(eg: my_new_function) will be binded with
+
+'my_function' name.
+
+-----decorator order------
+
+@decorator_b
+my_new_function
+
+And this becomes the usuall condition.
+
+'''
+
+
+def firstDecorator(fun):
+
+    '''
+    The first decorator when call with mutlti levels decorators.
+
+    '''
+
+    print 'execute in first decorator'
+
+    def wrap(*args):
+
+        fun(*args)
+
+    return wrap
+
+
+def secondDecorator(fun):
+
+    '''
+    The second decorator when call with mutlti levels decorators.
+
+    '''
+
+    print 'execute in second decorator'
+
+    def wrap(*args):
+
+        fun(*args)
+
+    return wrap
+
+
+@test_case
+def test_multi_levels_decorator_case():
+
+    @secondDecorator
+    @firstDecorator
+    def test_multi_levels_decorator(*args):
+
+        '''
+        Test how multi levels decorator works.
+
+        '''
+
+        print args
+
+    test_multi_levels_decorator(*range(10))
+
+
 def main():
 
     test_noarg_decorator_case()
+
+    test_noarg_withwraps_decorator_case()
 
     test_noarg_decorator_class_case()
 
@@ -460,6 +628,8 @@ def main():
     test_noarg_class_decorator_case()
 
     test_property_decorator_case()
+
+    test_multi_levels_decorator_case()
 
 
 if __name__ == '__main__':
