@@ -46,13 +46,13 @@ def test_case(test_fun):
 
     def wrap():
 
-        print ('\n============= start testing %s function ======'
-               '==========\n' % test_fun.__name__)
+        print ('\n======== start testing %s function ======\n' %
+               test_fun.__name__)
 
         test_fun()
 
-        print ('\n============ end testing %s function ========'
-               '==========\n' % test_fun.__name__)
+        print ('\n======== end testing %s function ========\n' %
+               test_fun.__name__)
 
     return wrap
 
@@ -370,10 +370,10 @@ def test_noexplicitargs_decorator_case():
         print e
 
 
-class no_argument_class_decorator(object):
+class single_argument_class_decorator(object):
 
     '''
-    This is a decorator class without argument.
+    This is a decorator class a single argument.
     A example for usage:
     >>> @no_argument_class_decorator
     >>> def your_function(*args):
@@ -402,17 +402,61 @@ class no_argument_class_decorator(object):
         return wrap
 
 
+class no_argument_class_decorator():
+
+    '''
+    A class decorator without any arguments.
+
+    '''
+
+    def __call__(self, fun):
+
+        show_name2address(fun)
+
+        def wrap(*args):
+
+            fun(*args)
+
+        show_name2address(wrap)
+
+        return wrap
+
+
 @test_case
 def test_noarg_class_decorator_case():
 
     '''
-    test function with no_argument_class_decorator.
+    Test no argument class decorator.
+
+    '''
+
+    try:
+
+        @no_argument_class_decorator()
+        def test_noarg_class_decorator(*args):
+
+            print args
+
+    except Exception, e:
+
+        print e
+
+    show_name2address(test_noarg_class_decorator)
+
+    test_noarg_class_decorator(*range(5))
+
+
+@test_case
+def test_singlearg_class_decorator_case():
+
+    '''
+    test function with single_argument_class_decorator.
 
     '''
     try:
 
-        @no_argument_class_decorator
-        def test_no_argument_class_decorator(s):
+        @single_argument_class_decorator
+        def test_single_argument_class_decorator(s):
 
             return [x[:-2] for x in s]
 
@@ -422,9 +466,9 @@ def test_noarg_class_decorator_case():
 
         print e
 
-    show_name2address(test_no_argument_class_decorator)
+    show_name2address(test_single_argument_class_decorator)
 
-    test_no_argument_class_decorator(*('justdoit', 'basketball player'))
+    test_single_argument_class_decorator(*('justdoit', 'basketball player'))
 
 '''
 def property_decorator(fun, *args):
@@ -626,6 +670,8 @@ def main():
     test_noexplicitargs_decorator_case()
 
     test_noarg_class_decorator_case()
+
+    test_singlearg_class_decorator_case()
 
     test_property_decorator_case()
 
