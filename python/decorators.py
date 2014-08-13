@@ -402,6 +402,36 @@ class single_argument_class_decorator(object):
         return wrap
 
 
+class another_single_argument_class_decorator(object):
+
+    '''
+    This is an another decorator class a single argument.
+    A example for usage:
+    >>> @no_argument_class_decorator
+    >>> def your_function(*args):
+    >>>     write your own code
+
+    '''
+
+    def __init__(self, fun):
+
+        print 'in the no_argument_class_decorator init'
+
+        self._fun = fun
+
+    def __call__(self, *args):
+
+        print 'in the no_argument_class_decorator new'
+
+        show_name2address(self._fun)
+
+        r = self._fun(args)
+
+        show_name2address(self.__call__)
+
+        return r
+
+
 class no_argument_class_decorator():
 
     '''
@@ -469,6 +499,33 @@ def test_singlearg_class_decorator_case():
     show_name2address(test_single_argument_class_decorator)
 
     test_single_argument_class_decorator(*('justdoit', 'basketball player'))
+
+
+@test_case
+def test_another_singlearg_class_decorator_case():
+
+    '''
+    test function with another single_argument_class_decorator.
+
+    '''
+    try:
+
+        @another_single_argument_class_decorator
+        def test_another_single_argument_class_decorator(s):
+
+            twice = lambda x: 2*x
+
+            return [twice(x) for x in s]
+
+    except Exception, e:
+
+        print 'class decorator error'
+
+        print e
+
+    show_name2address(test_another_single_argument_class_decorator)
+
+    print test_another_single_argument_class_decorator(*range(10))
 
 '''
 def property_decorator(fun, *args):
@@ -672,6 +729,8 @@ def main():
     test_noarg_class_decorator_case()
 
     test_singlearg_class_decorator_case()
+
+    test_another_singlearg_class_decorator_case()
 
     test_property_decorator_case()
 
