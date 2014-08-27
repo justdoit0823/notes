@@ -41,7 +41,7 @@ function detection()
 
     if $(kill -0 "$PID" > /dev/null 2&>1) ; then
 
-	TCPNUM=$(lsof -p | grep -c ":$LOCAL_PORT (LISTEN)")
+	TCPNUM=$(lsof -p "$PID" | grep -c ":$LOCAL_PORT (LISTEN)")
 
     fi
 
