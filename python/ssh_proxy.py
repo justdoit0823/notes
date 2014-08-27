@@ -2,6 +2,7 @@
 
 import os
 
+
 class SshProxyServer():
 
     '''
@@ -24,7 +25,8 @@ class SshProxyServer():
         return the ssh cmd arguments as a string.
 
         '''
-        return ('ssh', '-TfN', '-D %d' % self.local_port, '-p %d' % self.remote_port,
+        return ('ssh', '-TfN', '-D %d' % self.local_port,
+                '-p %d' % self.remote_port,
                 '%s@%s' % (self.remote_user, self.remote_host))
 
     def daemond(self):

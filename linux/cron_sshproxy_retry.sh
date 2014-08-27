@@ -13,13 +13,15 @@ function get_ssh_authsock()
 
 }
 
-function start_ssh_proxy()
+function restart_ssh_proxy()
 {
     #echo 'start ssh proxy connection'
 
     #ssh -qTfnN -D 8888 -p 22122 justdoit@shareyou.net.cn
 
     if [ `uname -a|cut -f 1 -d ' '` == "Linux" ] ; then
+
+	kill -9 $1 > /dev/null 2&>1
 
 	eval 'SSH_AUTH_SOCK=`get_ssh_authsock`' $SSH_PROXY_CMD
 
@@ -35,14 +37,21 @@ function detection()
 {
     PID=$(ps aux|grep "${SSH_PROXY_CMD}" | sort | head -1|awk '{print $2}')
 
-    if $(kill -0 "$PID" > /dev/null 2>&1) ; then
+    TCPNUM=0
 
-	#echo 'ssh proxy connection already exists.'
+    if $(kill -0 "$PID" > /dev/null 2&>1) ; then
+
+	TCPNUM=$(lsof -p | grep -c ":$LOCAL_PORT (LISTEN)")
+
+    fi
+
+    if [ $TCPNUM != 0 ] ; then
+
 	exit 0
 
     else
 
-	start_ssh_proxy
+	restart_ssh_proxy $PID
 
     fi
 }
