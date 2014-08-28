@@ -43,6 +43,51 @@ class C():
         print f
 
 
+'''
+How super works in python multiple class inheritance.
+The form of super(Subclass, self).method() will call
+both BaseClass method in order.And super(Baseclass, self).method()
+will call the Baseclass's common base class method at last,
+while only call first Baseclass's base class method.
+'''
+
+
+class BaseClass(object):
+
+    def f(self):
+        print 'method f in BaseClass'
+
+
+class NotBaseClass(object):
+
+    def f(self):
+
+        print 'method f in NotBaseClass'
+
+
+class LeftClass(BaseClass):
+
+    def f(self):
+        print 'method f in LeftClass'
+        super(LeftClass, self).f()
+
+
+class RightClass(NotBaseClass):
+
+    def f(self):
+
+        print 'method f in RightClass'
+        super(RightClass, self).f()
+
+
+class MergeClass(LeftClass, RightClass):
+
+    def f(self):
+
+        print 'method f in MergeClass'
+        super(MergeClass, self).f()
+
+
 def main():
 
     print A, A.foo, hex(id(A)), hex(id(A.foo)), hex(id(A.foo.__func__))
@@ -81,6 +126,13 @@ def main():
     C.foo('call class method')
 
     c.foo('call instance method')
+
+    merge = MergeClass()
+
+    merge.f()
+
+    print merge, dir(merge), merge.__subclasshook__, \
+        dir(merge.__subclasshook__)
 
 
 if __name__ == '__main__':
