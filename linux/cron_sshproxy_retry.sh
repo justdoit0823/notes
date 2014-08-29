@@ -21,7 +21,7 @@ function restart_ssh_proxy()
 
     if [ `uname -a|cut -f 1 -d ' '` == "Linux" ] ; then
 
-	kill -9 $1 > /dev/null 2&>1
+	kill -9 $1  &>/dev/null
 
 	eval 'SSH_AUTH_SOCK=`get_ssh_authsock`' $SSH_PROXY_CMD
 
@@ -39,7 +39,7 @@ function detection()
 
     TCPNUM=0
 
-    if $(kill -0 "$PID" > /dev/null 2&>1) ; then
+    if $(kill -0 "$PID"  &>/dev/null) ; then
 
 	TCPNUM=$(lsof -nPp "$PID" | grep -c ":$LOCAL_PORT (LISTEN)")
 
