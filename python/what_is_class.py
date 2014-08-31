@@ -72,7 +72,7 @@ class LeftClass(BaseClass):
         super(LeftClass, self).f()
 
 
-class RightClass(NotBaseClass):
+class RightClass(BaseClass):
 
     def f(self):
 
@@ -126,6 +126,18 @@ def main():
     C.foo('call class method')
 
     c.foo('call instance method')
+
+    # print class mro
+
+    print BaseClass.__mro__
+
+    print NotBaseClass.__mro__
+
+    print LeftClass.__mro__
+
+    print RightClass.__mro__
+
+    print MergeClass.__mro__
 
     merge = MergeClass()
 

@@ -3,7 +3,7 @@
 # This is written for retry connet to remote server when ssh proxy closed.
 
 
-SSH_PROXY_CMD="ssh -qTfnN -D 8888 -p 22122 justdoit@shareyou.net.cn"
+SSH_PROXY_CMD="ssh -qTfnN -D 8888 -p 22122 anoproxy@shareyou.net.cn"
 
 
 function get_ssh_authsock()
@@ -69,7 +69,7 @@ LOCAL_PORT=8888
 
 SSH_PROXY_PORT=22122
 
-SSH_USER='justdoit'
+SSH_USER='anoproxy'
 
 SSH_HOST='shareyou.net.cn'
 
@@ -98,7 +98,5 @@ while getopts 'hDpuH' opts ; do
 done
 
 SSH_PROXY_CMD="ssh -qTfnN -D ${LOCAL_PORT} -p ${SSH_PROXY_PORT} ${SSH_USER}@${SSH_HOST}"
-
-#echo "$SSH_PROXY_CMD"
 
 detection
