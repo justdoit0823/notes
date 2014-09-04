@@ -1,0 +1,9 @@
+# This is a list of hash functions
+
+1. md5
+
+2. murmurhash(http://en.wikipedia.org/wiki/MurmurHash)
+
+3. sha
+
+4. 
