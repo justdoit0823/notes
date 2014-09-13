@@ -1,0 +1,6 @@
+# This is a analysis of python source code structure
+
+
+		ob_refcnt
+
+		ob_type
