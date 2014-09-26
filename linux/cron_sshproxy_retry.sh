@@ -35,7 +35,7 @@ function restart_ssh_proxy()
 
 function detection()
 {
-    PID=$(ps aux|grep "${SSH_PROXY_CMD}" | sort | head -1|awk '{print $2}')
+    PID=$(ps aux|grep "${SSH_PROXY_CMD}" | grep -v grep | awk '{print $2}')
 
     TCPNUM=0
 
