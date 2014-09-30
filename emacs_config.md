@@ -14,7 +14,7 @@
 	(require 'ido)
 	(ido-mode t)
 
-	(require 'cua)
+	;(require 'cua)
 	(cua-mode t)
 	;在cua-mode开启式，可以用C-c,C-x,C-v来进行区域文本的复制,剪切和粘贴.
 
