@@ -9,7 +9,16 @@ SSH_PROXY_CMD="ssh -qTfnN -D 8888 -p 22122 anoproxy@shareyou.net.cn"
 function get_ssh_authsock()
 {
 
-    echo /run/user/*/key*/ssh
+    PLATFORM=$(uname -a|cut -f 1 -d ' ')
+    if [ $PLATFORM == "Linux" ] ; then
+	
+	echo /run/user/*/key*/ssh
+
+    elif [ $PLATFORM == 'Darwin' ] ; then
+
+	echo /tmp/launch-*/Listeners
+
+    fi
 
 }
 
@@ -19,17 +28,19 @@ function restart_ssh_proxy()
 
     #ssh -qTfnN -D 8888 -p 22122 justdoit@shareyou.net.cn
 
-    if [ `uname -a|cut -f 1 -d ' '` == "Linux" ] ; then
+    # if [ `uname -a|cut -f 1 -d ' '` == "Linux" ] ; then
 
-	kill -9 $1  &>/dev/null
+    # 	kill -9 $1  &>/dev/null
 
-	eval 'SSH_AUTH_SOCK=`get_ssh_authsock`' $SSH_PROXY_CMD
+    # 	eval 'SSH_AUTH_SOCK=`get_ssh_authsock`' $SSH_PROXY_CMD
 
-    else
+    # else
 
-	eval $SSH_PROXY_CMD
+    # 	eval $SSH_PROXY_CMD
 
-    fi
+    # fi
+
+    eval 'SSH_AUTH_SOCK=`get_ssh_authsock`' $SSH_PROXY_CMD
 
 }
 
