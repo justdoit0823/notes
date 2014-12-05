@@ -27,7 +27,7 @@ function restart_ssh_proxy()
 {
     #echo 'start ssh proxy connection'
 
-    kill -9 "$1" $>/dev/null
+    kill -9 "$1" &>/dev/null
 
     eval 'SSH_AUTH_SOCK=`get_ssh_authsock`' $SSH_PROXY_CMD
 
