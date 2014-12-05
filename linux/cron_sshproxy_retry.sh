@@ -16,7 +16,8 @@ function get_ssh_authsock()
 
     elif [ $PLATFORM == 'Darwin' ] ; then
 
-	echo /tmp/launch-*/Listeners
+	# echo /tmp/launch-*/Listeners
+	echo /private/tmp/com.apple.launchd.*/Listeners
 
     fi
 
@@ -26,19 +27,7 @@ function restart_ssh_proxy()
 {
     #echo 'start ssh proxy connection'
 
-    #ssh -qTfnN -D 8888 -p 22122 justdoit@shareyou.net.cn
-
-    # if [ `uname -a|cut -f 1 -d ' '` == "Linux" ] ; then
-
-    # 	kill -9 $1  &>/dev/null
-
-    # 	eval 'SSH_AUTH_SOCK=`get_ssh_authsock`' $SSH_PROXY_CMD
-
-    # else
-
-    # 	eval $SSH_PROXY_CMD
-
-    # fi
+    kill -9 "$1" $>/dev/null
 
     eval 'SSH_AUTH_SOCK=`get_ssh_authsock`' $SSH_PROXY_CMD
 
