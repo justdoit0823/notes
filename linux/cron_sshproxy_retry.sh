@@ -29,7 +29,7 @@ function restart_ssh_proxy()
 
     kill -9 "$1" &>/dev/null
 
-    eval 'SSH_AUTH_SOCK=`get_ssh_authsock`' $SSH_PROXY_CMD
+    eval "SSH_AUTH_SOCK=$(get_ssh_authsock)" "$SSH_PROXY_CMD"
 
 }
 
@@ -51,7 +51,7 @@ function detection()
 
     else
 
-	restart_ssh_proxy $PID
+	restart_ssh_proxy "$PID"
 
     fi
 }
