@@ -56,7 +56,9 @@ class sshTunneld(object):
             os._exit(1)
         if pid == 0:
             # child process
-            env = {'SSH_AUTH_SOCK': self.get_sshauth_sock()}
+            if 'SSH_AUTH_SOCK' not in os.environ:
+                os._exit(1)
+            env = {'SSH_AUTH_SOCK': os.environ['SSH_AUTH_SOCK']}
             os.execve(self._cmd, self._cmd_args, env)
             os._exit(1)
         else:
@@ -90,19 +92,10 @@ class sshTunneld(object):
 
     def get_sshtunnel_pid(self):
         cmd_str = ' '.join(self._cmd_args)
-        grep_str = "ps aux|grep \"{0}\" | grep -v grep | awk '{{print $2}}'".format(
-            cmd_str)
+        grep_str = ("ps aux|grep \"{0}\" | grep -v grep "
+                    "| awk '{{print $2}}'").format(cmd_str)
         pid = self.execute(grep_str)
         return int(pid) if pid else 0
-
-    def get_sshauth_sock(self):
-        po = platform.uname().system
-        if po == 'Darwin':
-            cmd_str = 'echo /private/tmp/com.apple.launchd.*/Listeners'
-        elif po == 'Linux':
-            cmd_str = 'echo /run/user/*/key*/ssh'
-        sock_path = self.execute(cmd_str)
-        return sock_path.strip('\n')
 
     def listen(self):
         self._sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
