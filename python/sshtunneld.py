@@ -20,7 +20,7 @@ class sshTunneld(object):
         self._lport = local_port
         self._rhost = remote_host
         self._rport = remote_port
-        addr = ':'.join((self._lhost, str(self._lport)))        
+        addr = ':'.join((self._lhost, str(self._lport)))
         self._cmd_args = (cmd, '-qTfnN', '-D{0}'.format(addr),
                           '-p{0}'.format(str(self._rport)),
                           '{0}@{1}'.format(self._user, self._rhost))
