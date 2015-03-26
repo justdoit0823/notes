@@ -6,30 +6,13 @@
 SSH_PROXY_CMD="ssh -qTfnN -D 0.0.0.0:8888 -p 22122 anoproxy@shareyou.net.cn"
 
 
-function get_ssh_authsock()
-{
-
-    PLATFORM=$(uname -a|cut -f 1 -d ' ')
-    if [ $PLATFORM == "Linux" ] ; then
-	
-	echo /run/user/*/key*/ssh
-
-    elif [ $PLATFORM == 'Darwin' ] ; then
-
-	# echo /tmp/launch-*/Listeners
-	echo /private/tmp/com.apple.launchd.*/Listeners
-
-    fi
-
-}
-
 function restart_ssh_proxy()
 {
     #echo 'start ssh proxy connection'
 
     kill -9 "$1" &>/dev/null
 
-    eval "SSH_AUTH_SOCK=$(get_ssh_authsock)" "$SSH_PROXY_CMD"
+    eval "SSH_AUTH_SOCK=${SSH_AUTH_SOCK}" "$SSH_PROXY_CMD"
 
 }
 
