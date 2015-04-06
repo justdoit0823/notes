@@ -6,40 +6,48 @@ import os
 import sys
 import select
 import signal
-import platform
 
 
 class sshTunneld(object):
 
     def __init__(self, cmd='/usr/bin/ssh', user='justdoit',
                  local_host='0.0.0.0', local_port=8888,
-                 remote_host='shareyou.net.cn', remote_port=22122):
+                 remote_host='shareyou.net.cn', remote_port=22122,
+                 log_file=None):
         self._cmd = cmd
         self._user = user
         self._lhost = local_host
         self._lport = local_port
         self._rhost = remote_host
         self._rport = remote_port
+        self._log = log_file or '/dev/null'
+        self._fd = None
         addr = ':'.join((self._lhost, str(self._lport)))
         self._cmd_args = (cmd, '-qTfnN', '-D{0}'.format(addr),
                           '-p{0}'.format(str(self._rport)),
                           '{0}@{1}'.format(self._user, self._rhost))
 
+    def check(self):
+        try:
+            self._fd = os.open(self._log, os.O_RDWR)
+        except PermissionError:
+            print('open file {0} permission denied'.format(self._log))
+            os._exit(1)
+        if 'SSH_AUTH_SOCK' not in os.environ:
+            print('please run ssh-agent first')
+            os._exit(1)
+
     def daemond(self):
+        self.check()
         pid = os.fork()
         if pid != 0:
             os._exit(1)
         if os.setsid() == -1:
             os._exit(1)
-        try:
-            fd = os.open('/dev/null', os.O_RDWR)
-        except PermissionError:
-            print('open /dev/null error.')
-            fd = -1
-        if fd != -1:
+        if self._fd is not None:
             stdfd = [s.fileno() for s in [sys.stdin, sys.stdout, sys.stderr]]
             for ofd in stdfd:
-                os.dup2(ofd, fd)
+                os.dup2(ofd, self._fd)
                 os.close(ofd)
         self.run()
 
@@ -56,8 +64,6 @@ class sshTunneld(object):
             os._exit(1)
         if pid == 0:
             # child process
-            if 'SSH_AUTH_SOCK' not in os.environ:
-                os._exit(1)
             env = {'SSH_AUTH_SOCK': os.environ['SSH_AUTH_SOCK']}
             os.execve(self._cmd, self._cmd_args, env)
             os._exit(1)
