@@ -25,6 +25,7 @@ connection和channel的关系
 =========================
 
 在rabbitmq中，connection代表的是一个真实的TCP层的连接，而channel是在这个连接上分出来的一个虚拟通道，用来实现数据的传输。所以一般代码示例如下:
+
 	import pika
 	con1 = pika.BlockingConnection()
 	cha1 = con1.channel()
