@@ -1,15 +1,18 @@
 Notes
 =====
 
-	This is a sumary about programming study.
+This is a sumary about programming study.
 
 Content
 =======
+* C
 
-	C
+* Python
 
-	Python
+* Network
 
-	Network
+* Linux
 
-	Linux
+* Data structure
+
+* Algorithm
