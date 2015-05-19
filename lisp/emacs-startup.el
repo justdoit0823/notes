@@ -3,11 +3,6 @@
 ;; Author: SenbinYu
 
 
-(setq my-package-manager "el-get")
-
-(package-install my-package-manager)
-
-
 (setq (package-list ("ido-mode" "fill-column-indicator" "python-mode" "jedi"
 		     "ace-jump-mode" "multiple-cursors" "undo-tree"
 		     ""
