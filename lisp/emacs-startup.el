@@ -3,14 +3,9 @@
 ;; Author: SenbinYu
 
 
-(setq (package-list ("ido-mode" "fill-column-indicator" "python-mode" "jedi"
+(setq package-list '("fill-column-indicator" "jedi"
 		     "ace-jump-mode" "multiple-cursors" "undo-tree"
-		     ""
-		     "project-mode" "git-emacs")))
-
-(dolist (package package-list) (el-get-install package))
-
-
+		     "projectile" "git-emacs"))
 
 (defun customize-color ()
   "customize color"
@@ -152,6 +147,7 @@
   (set-exec-path)
   (enable-line-column)
   (load-el-get)
+  (dolist (package package-list) (el-get-install package))
   (load-ido)
   (load-undo-tree)
   (load-multiple-cursor)
