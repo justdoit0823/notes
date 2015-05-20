@@ -1,9 +1,10 @@
+
 ;; This is my emacs startup file.
 
 ;; Author: SenbinYu
 
 
-(setq package-list '("fill-column-indicator" "jedi"
+(setq package-list '("fill-column-indicator" "jedi" "markdown-mode"
 		     "ace-jump-mode" "multiple-cursors" "undo-tree"
 		     "projectile" "git-emacs"))
 
@@ -51,6 +52,7 @@
 
 (defun set-markdown ()
   "set markdown"
+  (markdown-mode)
   (custom-set-variables
    ;; custom-set-variables was added by Custom.
    ;; If you edit it by hand, you could mess it up, so be careful.
@@ -154,6 +156,11 @@
   (load-jedi)
   (load-ace-jump)
   (set-markdown)
+  (load-projectile)
+  (load-git-emacs)
+  (load-fill-indicator)
 )
 
 (load-all)
+
+(provide 'emacs-startup)
