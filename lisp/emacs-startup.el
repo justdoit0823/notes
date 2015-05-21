@@ -52,7 +52,6 @@
 
 (defun set-markdown ()
   "set markdown"
-  (markdown-mode)
   (custom-set-variables
    ;; custom-set-variables was added by Custom.
    ;; If you edit it by hand, you could mess it up, so be careful.
@@ -138,6 +137,32 @@
    python-shell-completion-string-code
    "';'.join(get_ipython().Completer.all_completions('''%s'''))\n")
   )
+
+
+(defun show-ip
+    (host) "show ip information"
+    (interactive "sHost:")
+    (message (mapconcat
+	      (lambda (i)
+		(concat
+		 (symbol-name (car i)) ": " (cdr i)))
+	      (unless
+		  (not (require 'json))
+		(json-read-from-string
+		 (let
+		     ((out
+		       (shell-command-to-string
+			(concat "curl http://ipinfo.io/" host)
+			)
+		       ))
+		   (substring
+		    out
+		    (string-match "{" out)
+		    (+
+		     (string-match "}" out) 1
+		     )
+		    )
+		   ))) "\n")))
 
 
 (defun load-all ()
