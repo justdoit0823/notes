@@ -139,7 +139,7 @@
   )
 
 
-(defun show-ip
+(defun show-ip-info
     (host) "show ip information"
     (interactive "sHost:")
     (message (mapconcat
@@ -158,8 +158,8 @@
 		   (substring
 		    out
 		    (string-match "{" out)
-		    (+
-		     (string-match "}" out) 1
+		    (1+
+		     (string-match "}" out)
 		     )
 		    )
 		   ))) "\n")))
