@@ -41,5 +41,12 @@
 			   (git--get-top-dir) filename))))
   	  (if (> (length ret) 0) (error ret) (message "pass check")))))))
 
+(defun insert-line-next ()
+  "insert line next"
+  (interactive)
+  (progn
+    (move-beginning-of-line 2)
+    (open-line 1)))
+
 
 (provide 'emacs-plugin)
