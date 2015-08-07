@@ -7,9 +7,6 @@ from epc.server import EPCServer
 from collections import deque
 
 
-
-
-
 def get_file_def_list(*args):
     filename = args[0]
     with open(filename) as f:
@@ -71,13 +68,10 @@ def get_file_def_token(filename):
     class_def = False
     function_indent = False
     class_indent = False
-    function_dedent = False
-    class_dedent = False
     token_map = {}
     class_queue = deque()
     function_queue = deque()
     class_function_queue = deque()
-    class_class_queue = deque()
     root_class_name = ''
 
     while True:
@@ -111,7 +105,6 @@ def get_file_def_token(filename):
                         # irregular defination
                         continue
                     class_def = True
-                    class_name = token_str
                     root_class_name = token_str
                     token_map[token_str] = start
 
@@ -125,10 +118,8 @@ def get_file_def_token(filename):
                         function_indent = True
                     else:
                         function_queue.append(True)
-                elif token_type == tokenize.DEDENT and function_indent and\
-                     not function_dedent:
+                elif token_type == tokenize.DEDENT and function_indent:
                     # dedent here
-                    # function_dedent = True
                     try:
                         function_queue.pop()
                     except IndexError:
@@ -168,7 +159,6 @@ def get_file_def_token(filename):
                             # irregular defination
                             continue
                         class_def = True
-                        class_name = token_str
                         new_token_key = root_class_name + '.' + token_str
                         token_map[new_token_key] = start
                         class_queue.append((root_class_name, class_indent))
@@ -176,7 +166,6 @@ def get_file_def_token(filename):
                         class_indent = False
                 elif token_type == tokenize.DEDENT and class_indent:
                     # dedent here
-                    class_dedent = True
                     try:
                         root_class_name, class_indent = class_queue.pop()
                         class_def = True
@@ -200,7 +189,6 @@ def get_file_def_token(filename):
 
                 elif token_type == tokenize.DEDENT and function_indent:
                     # dedent here
-                    # function_dedent = True
                     try:
                         class_function_queue.pop()
                     except IndexError:
