@@ -21,7 +21,8 @@ def get_file_def_list(*args):
 def get_file_def_pos(*args):
     def_list = get_file_def_list(*args)
     def_token = get_file_def_token(args[0])
-    return iter_def_list(def_list, def_token)
+    def_map = iter_def_list(def_list, def_token)
+    return def_map.keys(), def_map
 
 
 def iter_def_list(def_list, token_map, rootclass=None):
