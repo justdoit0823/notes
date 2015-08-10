@@ -18,7 +18,9 @@
 (require 'epc)
 
 
-(defvar def-epc (epc:start-epc "python" '("/Users/justdoit/Documents/python/python_def_list_server.py")))
+(defvar-local pydef-path "~/.emacs.d/python_def_list_server.py")
+
+(defvar def-epc (epc:start-epc "python" '(pydef-path . nil)))
 
 
 (defun jump-to-def ()
