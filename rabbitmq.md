@@ -38,9 +38,9 @@ connection和channel的关系
 * fanout类型，此时用来路由的route_key是会被忽略的，因为不管是生产者还是消费都不需要使用它来进行消息的定向路由。
 在此场景下，消息的传递相当与广播，只要与指定exchange绑定的queue都会收到生产者的消息。
 
-* direct类型，此时会通过route_key来对应路由到具体的queue。exchange会根据生产者的route_key来进行选择queue。
+* direct类型，此时会通过route\_key来对应路由到具体的queue。exchange会根据生产者的route_key来进行选择queue。
 
-* topic类型，此时相当于对消息的路由进行定制，通过route_key来进行模式的匹配。绑定到exchange的queue会指定一个pattern，
+* topic类型，此时相当于对消息的路由进行定制，通过route\_key来进行模式的匹配。绑定到exchange的queue会指定一个pattern，
 exchange收到生产者的消息时，会根据生产者指定的route_key来匹配与exchange绑定的queue的pattern,从而进行消息路由。
 * headers类型，此时与direct比较类似，但不同于direct的是route_key不仅仅只是字符串，而可能是整数或者hash结构的数据。匹配规则类似于direct。
 
