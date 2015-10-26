@@ -34,9 +34,9 @@ function stat_pgpool_snapshot(){
 
     idle_count=$(awk '/idle/' $PGPOOL_TEMP | wc -l)
 
-    db_count=$(awk '/idle/' $PGPOOL_TEMP | awk '{db_count[$13] += 1} END {for(db in db_count) {print db, db_count[db]}}' | sort | awk '{s=s""$0" "} END {print s}')
+    db_idle_count=$(awk '/idle/' $PGPOOL_TEMP | awk '{db_count[$13] += 1} END {for(db in db_count) {print db, db_count[db]}}' | sort | awk '{s=s""$0" "} END {print s}')
 
-    host_idle_count=$(awk '/idle/' $PGPOOL_TEMP | awk '{host=substr($14, 0, 12); host_count[host] +=1} END {for(h in host_count) {print h, host_count[h]}}' | sort | awk '{s=s""$0" "} END {print s}')
+    host_idle_count=$(awk '/idle/' $PGPOOL_TEMP | awk '{pos=index($14, "("); host=substr($14, 0, pos-1); host_count[host] +=1} END {for(h in host_count) {print h, host_count[h]}}' | sort | awk '{s=s""$0" "} END {print s}')
 
     now=$(date "+%Y-%m-%d %H:%M:%S")
 
