@@ -30,3 +30,5 @@ Content
 * Go
 
 * Message Queue
+
+* Rust
