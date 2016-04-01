@@ -64,7 +64,7 @@ PostgreSQL运维文档
 
 * 全库物理备份
 
-		pg_basebackup -h 192.168.1.21 -U replecation -F t -P -x -R -D /home/postgres/pgdata -l backup201507131613
+		pg_basebackup -h 192.168.1.21 -U replication -F t -P -x -R -D /home/postgres/pgdata -l backup201507131613
 
 		cd $PGDATA
 

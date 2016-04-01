@@ -3,7 +3,7 @@
 
 (defun git--check-python-syntax (filename)
   "check python file syntax in git repository"
-  (unless (not (equal (file-name-extension filename) "py"))
+  (unless (not (and (file-exists-p filename) (equal (file-name-extension filename) "py")))
     (let
 	((ret (shell-command-to-string
 	       (concat "python3 /usr/local/bin/pyflakes "
@@ -34,7 +34,7 @@
   "check python modified code in git repository"
   (dolist (file (git--ls-files "-m"))
     (let ((filename (git--fileinfo->name file)))
-      (unless (not (equal (file-name-extension filename) "py"))
+      (unless (not (and (file-exists-p filename) (equal (file-name-extension filename) "py")))
 	(let
 	    ((ret (shell-command-to-string
 		   (concat "python /usr/local/bin/pyflakes "
