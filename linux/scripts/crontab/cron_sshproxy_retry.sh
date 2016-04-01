@@ -3,9 +3,6 @@
 # This is written for retry connet to remote server when ssh proxy closed.
 
 
-SSH_PROXY_CMD="ssh -qTfnN -D 0.0.0.0:8888 -p 22122 anoproxy@shareyou.net.cn"
-
-
 function restart_ssh_proxy()
 {
     #echo 'start ssh proxy connection'
@@ -54,7 +51,7 @@ SSH_PROXY_PORT=22122
 
 SSH_USER='anoproxy'
 
-SSH_HOST='shareyou.net.cn'
+SSH_HOST='notesus.info'
 
 # parse command arguments
 
