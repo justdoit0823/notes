@@ -23,3 +23,5 @@ Recurrent Neural Networks
 * <http://www.csdn.net/article/2015-07-07/2825148/1>
 
 * <https://github.com/dmlc/mxnet/issues/797>
+
+* <http://www.deeplearningbook.org/>
