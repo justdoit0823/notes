@@ -25,3 +25,5 @@ Recurrent Neural Networks
 * <https://github.com/dmlc/mxnet/issues/797>
 
 * <http://www.deeplearningbook.org/>
+
+* <http://randomekek.github.io/deep/deeplearning.html>

@@ -49,3 +49,5 @@
 25	统计	  https://github.com/davidsonfellipe/awesome-wpo#stats
 
 26	Web Performance 群组	https://github.com/davidsonfellipe/awesome-wpo#web-performance-meetup-groups
+
+27      SRE   http://danluu.com/google-sre-book/

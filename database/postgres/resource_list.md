@@ -7,14 +7,10 @@ PostgreSQL文档链接
 PostgreSQL插件
 --------------
 
-* pg_strom
-
-<http://wiki.postgresql.org/wiki/PGStrom?utm_source=feedly>
+* [pg_strom](http://wiki.postgresql.org/wiki/PGStrom?utm_source=feedly)
 
 
-* udr/bdr
-
-<http://bdr-project.org/docs/stable/index.html>
+* [udr/bdr](http://bdr-project.org/docs/stable/index.html)
 
 
 
@@ -28,11 +24,7 @@ PostgreSQL命令
 PostgreSQL工具
 --------------
 
-* barman
-
-<http://www.pgbarman.org/>
+* [barman](http://www.pgbarman.org/)
 
 
-* pgbadger
-
-<https://github.com/dalibo/pgbadger>
+* [pgbadger](https://github.com/dalibo/pgbadger)
