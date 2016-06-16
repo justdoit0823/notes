@@ -1,0 +1,37 @@
+
+# install brew
+
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+
+# install xcode(include git)
+
+
+# install nginx
+
+brew install nginx
+
+
+# install emacs
+
+brew install emacs
+
+
+# install python
+
+brew install python python3
+
+
+# install ipython
+
+pip install ipython
+
+
+# install virtualenv
+
+pip install virtualenv
+
+
+# install golang
+
+brew install golang

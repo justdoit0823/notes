@@ -6,7 +6,7 @@
 
 (setq package-list '("fill-column-indicator" "jedi" "markdown-mode"
 		     "ace-jump-mode" "multiple-cursors" "undo-tree"
-		     "projectile" "git-emacs"))
+		     "projectile" "git-emacs" "jedi"))
 
 (defun customize-color ()
   "customize color"
@@ -34,7 +34,7 @@
 (defun load-undo-tree ()
   "load undo tree"
   (require 'undo-tree)
-  (undo-tree-mode t)
+  (global-undo-tree-mode)
   )
 
 (defun load-multiple-cursor ()
@@ -93,6 +93,7 @@
 (defun load-jedi ()
   "load jedi"
   (add-hook 'python-mode-hook 'jedi:setup)
+  (setq jedi:complete-on-dot t)
   )
 
 (defun enable-line-column ()
@@ -104,6 +105,7 @@
 
 (defun load-el-get ()
   "load el-get"
+  (add-to-list 'load-path "~/.emacs.d/el-get")
   (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
   (unless (require 'el-get nil t)
     (url-retrieve
