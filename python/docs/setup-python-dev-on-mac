@@ -22,6 +22,11 @@ brew install emacs
 brew install python python3
 
 
+# install git shell
+
+brew install git-sh
+
+
 # install ipython
 
 pip install ipython
