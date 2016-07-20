@@ -1,10 +1,11 @@
 
-
 MySQL中间件Atlas
 ================
 
 
-	Atlas是由 Qihoo 360公司Web平台部基础架构团队开发维护的一个基于MySQL协议的数据中间层项目。它在MySQL官方推出的MySQL-Proxy 0.8.2版本的基础上，修改了大量bug，添加了很多功能特性。
+	Atlas是由 Qihoo 360公司Web平台部基础架构团队开发维护的一个基于MySQL协议的数据中间层项目。
+
+	它在MySQL官方推出的MySQL-Proxy 0.8.2版本的基础上，修改了大量bug，添加了很多功能特性。
 
 
 
@@ -15,8 +16,12 @@ MySQL中间件Atlas
   * 开源情况
 
 
-		代码开源发布在Github，有372分关注，1953个star，625个fork。有两个主干分支，master和sharding，master分支主要做功能正式发布，sharding分支做Atlas sharding方案。
+		代码开源发布在Github，有372分关注，1953个star，625个fork。
+
+		有两个主干分支，master和sharding，master分支主要做功能正式发布，sharding分支做Atlas sharding方案。
+
 		发布了11个release，同时有两位contributor。从提交纪录来看，该项目不是基于Github开发，导致open的issue较多，交流不及时。
+
 
   * 主要功能
 
@@ -49,7 +54,6 @@ MySQL中间件Atlas
 	  * 实现了真正意义上的连接池
 
 	  * 优化了锁机制，性能提高数十倍
-
 
 
 Atlas架构
@@ -94,6 +98,7 @@ sharding方案
 		group切分支持两种模式，range和hash；range容易产生热点，hash适合均衡分布的查询。
 
 		跨group功能支持较弱，只能正确支持CURD语句，不支持准确的聚合查询和事务。
+
 
 实用功能
 ========
