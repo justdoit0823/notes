@@ -59,16 +59,19 @@ Atlas架构
   * 整体架构
 
 
-		Client -------> Atlas --------> MySQL Cluster
+![Atlas总体架构图](https://camo.githubusercontent.com/42c01a1245183948ba8c61e5572d3aa9c3e8a08e/687474703a2f2f7777332e73696e61696d672e636e2f6c617267652f36653537303561356a7731656271353169336668716a32306a69306a6a7767392e6a7067)
 
-		分析Client端发送过来的sql，根据既定策略把sql发到后面的MySQL实例。
+
+	分析Client端发送过来的sql，根据既定策略把sql发到后面的MySQL实例。
 
 
   * 配置成HA的结构
 
-		Web Application --------> LVS --------> Atlas ----------> MySQL Cluster
 
-		数据库集群配置成一主多从，前端至少两台Atlas机器，通过LVS来做HA。
+![Atlas HA配置](https://camo.githubusercontent.com/4e602b6883556d3d33944871f76c2e23f8b229a2/687474703a2f2f7777342e73696e61696d672e636e2f6c617267652f36653537303561356a77316562713539766f39396e6a32306835306a39337a6d2e6a7067)
+
+
+	数据库集群配置成一主多从，前端至少两台Atlas机器，通过LVS来做HA。
 
 
 sharding方案
@@ -82,7 +85,9 @@ sharding方案
 
   * Atlas Sharding
 
-		Atlas ------> MySQL cluster group -------> MySQL Cluster
+
+![Atlas Sharding](https://camo.githubusercontent.com/27c1cf8ccd7aafe18ac20c8bf1874192b4ac6850/687474703a2f2f7777312e73696e61696d672e636e2f6c617267652f36633034613030646a773165706d757267703778726a3230716f306b3061616c2e6a7067)
+
 
 		支持多group，单个group为一主多从MySQL集群，可兼容第一种sharding方式。
 
