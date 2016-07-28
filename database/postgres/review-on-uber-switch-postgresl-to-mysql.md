@@ -3,7 +3,8 @@
 Uber switch PostgreSQL to MySQL
 ===============================
 
-	[原文](https://eng.uber.com/mysql-migration/)出自uber官方博客上面的一篇文章。
+
+[原文](https://eng.uber.com/mysql-migration/)出自uber官方博客上面的一篇文章。
 
 
 
