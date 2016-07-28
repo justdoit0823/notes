@@ -1,9 +1,10 @@
 
 
-Uber switch postgresql to mysql
+Uber switch PostgreSQL to MySQL
 ===============================
 
-	原文出自uber官方博客上面的一篇文章，<https://eng.uber.com/mysql-migration/>。
+	[原文](https://eng.uber.com/mysql-migration/)出自uber官方博客上面的一篇文章。
+
 
 
 PostgreSQL的不足
@@ -20,6 +21,7 @@ PostgreSQL的不足
   * 难以升级到新版本（跨大版本 ）
 
 
+
 PostgreSQL与MySQL的实现对比
 ===========================
 
@@ -29,7 +31,7 @@ PostgreSQL与MySQL的实现对比
 
 		而MySQL则是通过主键来寻址到行的物理位置，然后次级索引都是指向主键。
 
-		同时，PostgreSQL的插入又是通过新插行来实现的，导致每一次非索引列的更新都要对索引进行更新，从而放大了写的量。
+		同时PostgreSQL的插入又是通过新插行来实现的，导致每一次非索引列的更新都要对索引进行更新，从而放大了写的量。
 
 		但是文章中举例一个表建12个索引，来说明事情的严重性，我觉得也很上天。
 
@@ -81,6 +83,7 @@ PostgreSQL与MySQL的实现对比
 		这个没怎么研究，不太懂。
 
 
+
 总结
 ====
 
@@ -94,11 +97,11 @@ PostgreSQL与MySQL的实现对比
   * PostgreSQL都快要发布9.6了，作者还这儿通过将9.2的一些问题来说PostgreSQL不如MySQL
 
 
+
 引用
 ====
 
   * <https://eng.uber.com/mysql-migration/>
-
 
   * <http://blog.2ndquadrant.com/tradeoffs_in_hot_standby_deplo/>
 
