@@ -46,7 +46,10 @@ c1, addr = s1.accept()
 状态迁移
 --------
 
+```
+
 CLOSED  ------->  SYN_SENT (调用connect, 开始TCP三路握手，发送SYN字节流)   ---------->   收到ACK确认和SYN字节流    ---------> ESTABLISHED (发送ACK确认，connect成功返回)
+
 
                      |                                                                           ^
 					 |                                                                           |
@@ -55,8 +58,10 @@ CLOSED  ------->  SYN_SENT (调用connect, 开始TCP三路握手，发送SYN字�
 					 |                                                                           |
 					 V                                                                           |
 
+
 CLOSED ---------> LISTEN (调用listen，开始侦听)  --------> SYN_RECV (跟accept调用无关) -------->  发送带有ACK确认的SYN字节流  ------------> ESTABLISHED (收到ACK确认, 同时放入接收队列，等待accept取)
 
+```
 
 
 接收过程
@@ -71,7 +76,7 @@ accept过程
 队列限制
 --------
 
-接收队列满后，接收端会采取丢弃ACK确认包，重发SYN/ACK包让发起端重试，等待队列被消耗。重试次数见设置/proc/sys/net/ipv4/tcp\_synack_retries。详见<http://veithen.github.io/2014/01/01/how-tcp-backlog-works-in-linux.html>
+接收队列满后，接收端会采取丢弃ACK确认包，重发SYN/ACK包让发起端确认，等待队列被消耗。重发次数见设置/proc/sys/net/ipv4/tcp\_synack_retries。详见<http://veithen.github.io/2014/01/01/how-tcp-backlog-works-in-linux.html>
 
 
 connect错误说明
