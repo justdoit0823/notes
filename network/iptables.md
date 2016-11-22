@@ -80,6 +80,24 @@ iptables rule command
 * replace rule with -R
 
 
+table detail
+==============
+
+
+nat
+---
+
+  * SNAT
+
+SNAT是用来改变packet的源地址，让packet看起来是从指定地址来的，一般是发生在路由选择之后发送packet之前。 Masquerading是一种特殊的SNAT。
+
+
+  * DNAT
+
+DNAT是用来改变packet的目的地址，让packet去指定的地址，一般发生在收到packet之后选择路由之前。主要用来做端口转发，负载分发和透明代理等。
+
+
+
 iptable website
 ===============
 
