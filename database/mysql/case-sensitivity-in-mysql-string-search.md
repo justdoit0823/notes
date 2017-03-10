@@ -38,7 +38,7 @@ mysql> select 'a' = 'A';
 +-----------+
 1 row in set (0.00 sec)
 
-mysql> select 'a' collate utf8\_general_ci = 'A' collate utf8_general_ci;
+mysql> select 'a' collate utf8_general_ci = 'A' collate utf8_general_ci;
 +-----------------------------------------------------------+
 | 'a' collate utf8_general_ci = 'A' collate utf8_general_ci |
 +-----------------------------------------------------------+
