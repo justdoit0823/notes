@@ -103,16 +103,20 @@ Read the next 16 bits and interpret those as an unsigned integer.
 Read the next 64 bits and interpret those as an unsigned integer.
 
 ```
+import struct
+
 def payload_length(payload):
 
-	__, payloadlen = struct.unpack("BB", payload[:2])
-	payloadlen &= 0x7f
-	if payload <= 125:
-		return payloadlen
-	elif payload == 126:
-		return struct.unpack("!H", data[2: 4])[0]
-	elif payload == 127:
-		return struct.unpack("!Q", data[2: 10])[0]
+    __, payloadlen = struct.unpack("BB", payload[:2])
+    payloadlen &= 0x7f
+    if payload <= 125:
+        return payloadlen
+    elif payload == 126:
+        return struct.unpack("!H", data[2: 4])[0]
+    elif payload == 127:
+        return struct.unpack("!Q", data[2: 10])[0]
+
+    raise ValueError('Invalid payload.')
 ```
 
 Message Fragmentation
@@ -149,8 +153,8 @@ Upon receiving such a frame, the other peer sends a Close frame in response. The
 How To Authenticate
 ===================
 
-HTTP Basic Authenticate
------------------------
+HTTP Authenticattion
+---------------------
 
 First begin a full http basic authentication, and then start connecting to websocket server.
 
@@ -177,3 +181,5 @@ Reference
   * <https://devcenter.heroku.com/articles/websocket-security#authentication-authorization>
 
   * <https://tools.ietf.org/html/rfc6455#section-4>
+
+  * <https://tools.ietf.org/html/rfc2617>
