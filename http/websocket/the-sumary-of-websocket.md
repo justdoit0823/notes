@@ -103,16 +103,21 @@ Read the next 16 bits and interpret those as an unsigned integer.
 Read the next 64 bits and interpret those as an unsigned integer.
 
 ```
+import struct
+
+
 def payload_length(payload):
 
-	__, payloadlen = struct.unpack("BB", payload[:2])
-	payloadlen &= 0x7f
-	if payload <= 125:
-		return payloadlen
-	elif payload == 126:
-		return struct.unpack("!H", data[2: 4])[0]
-	elif payload == 127:
-		return struct.unpack("!Q", data[2: 10])[0]
+    __, payloadlen = struct.unpack("BB", payload[:2])
+    payloadlen &= 0x7f
+    if payload <= 125:
+        return payloadlen
+    elif payload == 126:
+        return struct.unpack("!H", data[2: 4])[0]
+    elif payload == 127:
+        return struct.unpack("!Q", data[2: 10])[0]
+
+    raise ValueError('Invalid payload.')
 ```
 
 Message Fragmentation
@@ -158,7 +163,7 @@ First begin a full http basic authentication, and then start connecting to webso
 HTTP Cookie
 ------------
 
-When client starts a websocket connection, the cookie header can be included. So the client need to authenticate with a http request before.
+When client starts a websocket connection, the cookie header can be included. So the client should authenticate with a http request before.
 
 
 Ticket
