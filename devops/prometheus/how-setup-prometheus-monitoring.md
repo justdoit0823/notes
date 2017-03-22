@@ -291,7 +291,7 @@ _collect_registry = CollectorRegistry()
 _http_duration_buckets = (
     10, 20, 50, 80, 100, 200, 500, 1000, 3000, 5000, 10000)
 _http_request_duration_microseconds = Histogram(
-	'http_request_duration_microseconds',
+    'http_request_duration_microseconds',
     'HTTP request duration in microseconds.',
     labelnames=('method', 'url'),
     registry=_collect_registry, buckets=_http_duration_buckets)
@@ -319,7 +319,7 @@ def async_push_to_gateway(host, job, registry, grouping_key=None, timeout=None):
 
 def register_metric_push(host, job, interval=15):
 
-	push_callback = functools.partial(
+    push_callback = functools.partial(
         async_push_to_gateway, host, job, _collect_registry, timeout=5)
     periodic_cb = PeriodicCallback(push_callback, interval * 1000)
     periodic_cb.start()
@@ -349,7 +349,7 @@ _collect_registry = CollectorRegistry()
 _http_duration_buckets = (
     10, 20, 50, 80, 100, 200, 500, 1000, 3000, 5000, 10000)
 _http_request_duration_microseconds = Histogram(
-	'http_request_duration_microseconds',
+    'http_request_duration_microseconds',
     'HTTP request duration in microseconds.',
     labelnames=('method', 'url'),
     registry=_collect_registry, buckets=_http_duration_buckets)
@@ -357,39 +357,39 @@ _http_request_duration_microseconds = Histogram(
 
 class RecordMetricMiddleware:
 
-	def __init__(self):
+    def __init__(self):
 
-	    self.register_metric_push(settings.PUSH_METRIC_INTERVAL)
-		self._last_push_time = time.time()
+        self.register_metric_push(settings.PUSH_METRIC_INTERVAL)
+        self._last_push_time = time.time()
 
-	def register_metric_push(self, interval=15):
+    def register_metric_push(self, interval=15):
 
-	    request_started.connect(self.push_metric)
-		request_finished.connect(self.push_metric)
+        request_started.connect(self.push_metric)
+        request_finished.connect(self.push_metric)
 
-	def push_metric(self):
+    def push_metric(self):
 
-	    now = time.time()
-		if now - self._last_push_time >= interval:
-			push_to_gateway(
-				settings.PUSH_METRIC_HOST, settings.PUSH_METRIC_JOB,
-				_collect_registry)
-			self._last_push_time = time.time()
+        now = time.time()
+        if now - self._last_push_time >= interval:
+            push_to_gateway(
+                settings.PUSH_METRIC_HOST, settings.PUSH_METRIC_JOB,
+                _collect_registry)
+            self._last_push_time = time.time()
 
-	def process_request(self, request):
+    def process_request(self, request):
 
-	    self._start_time = time.time()
+        self._start_time = time.time()
 
-	def process_response(self, request, response):
+    def process_response(self, request, response):
 
-	    finish_time = time.time()
-		duration = max(finish_time - self._start_time, 0)
-		record_http_duration_metric(request, duration)
+        finish_time = time.time()
+        duration = max(finish_time - self._start_time, 0)
+        record_http_duration_metric(request, duration)
 
 
 def record_http_duration_metric(request, duration):
 
-	request_time = 1000.0 * duration
+    request_time = 1000.0 * duration
     _http_request_duration_microseconds.labels(
         method=request.method, url=request.path).observe(duration)
 
