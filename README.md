@@ -7,6 +7,8 @@ Content
 =======
 * C
 
+* Devops
+
 * Python
 
 * Network
