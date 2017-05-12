@@ -3,38 +3,44 @@ Notes
 
 This is a sumary about programming study.
 
+
 Content
 =======
-* C
-
-* Devops
-
-* Python
-
-* Network
-
-* Linux
-
-* Data structure
 
 * Algorithm
 
-* Lisp
-
-* Search
+* C
 
 * Cipher
 
-* Editor
-
-* Machine Learning
-
-* Go
-
-* Message Queue
-
-* Rust
+* Compiler
 
 * Crawl
 
+* Database
+
+* Data Structure
+
+* Devops
+
+* Editor
+
+* Golang
+
 * HTTP
+
+* Linux
+
+* Lisp
+
+* Machine Learning
+
+* Message Queue
+
+* Network
+
+* Python
+
+* Rust
+
+* Search
