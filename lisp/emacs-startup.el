@@ -1,12 +1,14 @@
 
-;; This is my emacs startup file.
+;; An emacs startup file for C/Python programmer.
 
 ;; Author: SenbinYu
 
 
 (setq package-list '("fill-column-indicator" "jedi" "markdown-mode"
 		     "ace-jump-mode" "multiple-cursors" "undo-tree"
-		     "projectile" "git-emacs" "jedi"))
+		     "projectile" "git-emacs" "jedi" "emacs-async"
+		     "helm" "ggtags"))
+
 
 (defun customize-color ()
   "customize color"
@@ -124,6 +126,32 @@
   )
 
 
+(defun load-helm ()
+  "Load helm."
+  (add-to-list 'load-path "~/.emacs.d/el-get/helm")
+  (require 'helm-config)
+  )
+
+
+(defun load-ggtags ()
+  "Load ggtags."
+  (add-to-list 'load-path "~/.emacs.d/el-get/ggtags")
+  (require 'ggtags)
+  (add-hook 'c-mode-common-hook
+	    (lambda ()
+	      (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
+		(ggtags-mode 1))))
+
+  (define-key ggtags-mode-map (kbd "C-c g s") 'ggtags-find-other-symbol)
+  (define-key ggtags-mode-map (kbd "C-c g h") 'ggtags-view-tag-history)
+  (define-key ggtags-mode-map (kbd "C-c g r") 'ggtags-find-reference)
+  (define-key ggtags-mode-map (kbd "C-c g f") 'ggtags-find-file)
+  (define-key ggtags-mode-map (kbd "C-c g c") 'ggtags-create-tags)
+  (define-key ggtags-mode-map (kbd "C-c g u") 'ggtags-update-tags)
+  (define-key ggtags-mode-map (kbd "M-,") 'pop-tag-mark)
+  )
+
+
 (defun set-python-var ()
   "set python variable"
   (setq python-check-command "python3 /usr/local/bin/pyflakes")
@@ -186,6 +214,8 @@
   (load-projectile)
   (load-git-emacs)
   (load-fill-indicator)
+  (load-helm)
+  (load-ggtags)
 )
 
 (load-all)
