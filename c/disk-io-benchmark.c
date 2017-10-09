@@ -36,7 +36,7 @@ int main(int argc, char * argv[]){
     printf("create temp path failed.\n");
     return 0;
   }
-  fd = open(file_path, flags, 644);
+  fd = open(file_path, flags, 0644);
   if(fd == -1){
     printf("open file failed %s.\n", strerror(errno));
     return 0;
