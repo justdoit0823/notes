@@ -10,7 +10,7 @@ function print_stack(){
     if [[ $system_name = 'Darwin' ]]; then
 	echo 'thread backtrace all' | lldb -p $pid
     else
-	pstack -p $pid
+	pstack $pid
     fi
 
 }
