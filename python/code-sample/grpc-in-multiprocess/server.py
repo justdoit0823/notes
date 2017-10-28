@@ -3,8 +3,6 @@
 
 from concurrent import futures
 import multiprocessing
-import os
-import time
 
 import grpc
 
@@ -18,7 +16,7 @@ class Greeter(helloworld_pb2_grpc.GreeterServicer):
     return helloworld_pb2.HelloReply(message='Hello, %s!' % request.name)
 
 
-channel = grpc.insecure_channel('localhost:50051')
+channel = grpc.insecure_channel('127.0.0.1:50051')
 stub = helloworld_pb2_grpc.GreeterStub(channel)
 
 
@@ -35,7 +33,7 @@ def child_client_call():
 def serve():
   server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
   helloworld_pb2_grpc.add_GreeterServicer_to_server(Greeter(), server)
-  server.add_insecure_port('[::]:50051')
+  server.add_insecure_port('127.0.0.1:50051')
   server.start()
 
   p1 = multiprocessing.Process(target=child_client_call)
