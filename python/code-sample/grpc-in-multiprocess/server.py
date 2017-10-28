@@ -3,6 +3,7 @@
 
 from concurrent import futures
 import multiprocessing
+import os
 
 import grpc
 
@@ -20,6 +21,10 @@ channel = grpc.insecure_channel('127.0.0.1:50051')
 stub = helloworld_pb2_grpc.GreeterStub(channel)
 
 
+def pstack():
+  os.system('sh ./pstack.sh {0}'.format(os.getpid()))
+
+
 def run_call():
   print('Greeter client start.')
   response = stub.SayHello(helloworld_pb2.HelloRequest(name='you'))
@@ -28,6 +33,7 @@ def run_call():
 
 def child_client_call():
   run_call()
+  pstack()
 
 
 def serve():
@@ -42,6 +48,7 @@ def serve():
   p1.join(timeout=60)
   if p1.is_alive():
     print('call timeout.')
+    pstack()
     p1.terminate()
 
   server.stop(0)
