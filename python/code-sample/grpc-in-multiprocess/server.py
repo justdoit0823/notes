@@ -4,6 +4,7 @@
 from concurrent import futures
 import multiprocessing
 import os
+import time
 
 import grpc
 
@@ -22,7 +23,7 @@ stub = helloworld_pb2_grpc.GreeterStub(channel)
 
 
 def pstack():
-  os.system('sh ./pstack.sh {0}'.format(os.getpid()))
+  os.system('bash ./pstack.sh {0}'.format(os.getpid()))
 
 
 def run_call():
@@ -34,6 +35,7 @@ def run_call():
 def child_client_call():
   run_call()
   pstack()
+  time.sleep(10)  # make sure the pstack.sh exits before current process
 
 
 def serve():

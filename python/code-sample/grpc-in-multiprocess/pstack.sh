@@ -1,5 +1,5 @@
 
-#!/usr/bin/sh
+#!/usr/bin/bash
 
 
 function print_stack(){
