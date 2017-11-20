@@ -26,7 +26,7 @@ Writing benchmark
 =================
 
 In order to compare writing speed between python and c, I have written two programs in python and c.
-All programs can be found at <>.
+All programs can be found at <https://github.com/justdoit0823/notes/tree/master/python/code-sample/how-the-write-function-in-python-runs-as-fast-as-that-in-c>.
 
 
 Asynchronous write
@@ -231,7 +231,14 @@ sys	0m20.506s
 ```
 
 
+
+### Test on ubuntu ###
+
 Next, I run the benchmark on my ubuntu server, the system info is `Linux justdoit-thinkpad-e420 4.13.0-16-lowlatency #19-Ubuntu SMP PREEMPT Wed Oct 11 19:51:52 UTC 2017 x86_64 x86_64 x86_64 GNU/Linux`.
+
+  * C version
+
+Test bash scripts,
 
 ```bash
 for i in `seq 5`; do time ./disk-io-benchmark 1073741824 4096; done
@@ -278,7 +285,7 @@ And the related io statistic,
 avg-cpu:  %user   %nice %system %iowait  %steal   %idle
            1.52    0.00   16.96   26.08    0.00   55.44
 
-Device            r/s     w/s     rkB/s     wkB/s   rrqm/s   wrqm/s  %rrqm  %wrqm r_await w_await aqu-sz rareq-sz wareq-sz  svctm  %util
+Device            r/s     w/s     rkB/s     wkB/s   rrqm/s   wrqm/s  %rrqm  %wrqm r\_await w_await aqu-sz rareq-sz wareq-sz  svctm  %util
 sda              2.00   80.00      8.00  79880.00     0.00     0.00   0.00   0.00  173.00  297.65  96.80     4.00   998.50  12.20 100.00
 scd0             0.00    0.00      0.00      0.00     0.00     0.00   0.00   0.00    0.00    0.00   0.00     0.00     0.00   0.00   0.00
 
@@ -493,6 +500,11 @@ So the disk's writing speed is saturating.
 
 The python info is `Python 3.6.3 [GCC 7.2.0]`.
 
+```bash
+for i in `seq 5`; do time python disk-io-benchmark.py 10737418240 4096; done
+```
+
+
 
 ```
 successfully write 1073741824 bytes.
@@ -527,7 +539,7 @@ sys	0m3.240s
 avg-cpu:  %user   %nice %system %iowait  %steal   %idle
            2.28    0.00    8.35   50.13    0.00   39.24
 
-Device            r/s     w/s     rkB/s     wkB/s   rrqm/s   wrqm/s  %rrqm  %wrqm r_await w_await aqu-sz rareq-sz wareq-sz  svctm  %util
+Device            r/s     w/s     rkB/s     wkB/s   rrqm/s   wrqm/s  %rrqm  %wrqm r\_await w_await aqu-sz rareq-sz wareq-sz  svctm  %util
 sda              0.00   92.00      0.00  81920.00     0.00     3.00   0.00   3.16    0.00 1451.10 143.09     0.00   890.43  10.87 100.00
 scd0             0.00    0.00      0.00      0.00     0.00     0.00   0.00   0.00    0.00    0.00   0.00     0.00     0.00   0.00   0.00
 
@@ -665,6 +677,12 @@ sda              0.00    0.00      0.00      0.00     0.00     0.00   0.00   0.0
 scd0             0.00    0.00      0.00      0.00     0.00     0.00   0.00   0.00    0.00    0.00   0.00     0.00     0.00   0.00   0.00
 ```
 
+
+Synchronous write
+-----------------
+
+
+
 How does this happen?
 ---------------------
 
@@ -757,3 +775,5 @@ Reference
   * write(2)
 
   * close(2)
+
+  * iostat(1)
