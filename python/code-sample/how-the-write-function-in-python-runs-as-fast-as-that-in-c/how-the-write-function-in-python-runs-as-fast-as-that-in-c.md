@@ -2,7 +2,7 @@
 How writing to a file?
 =======================
 
-In linux operating system, there is a posix api `write`, which supports writing `count` bytes to a file.
+In linux operating system, there is a [posix](https://en.wikipedia.org/wiki/POSIX) api `write`, which supports writing `count` bytes to a file.
 Before writing, we need a file descriptor which can be returned from another posix api `open`.
 But how could we operate in python?
 
@@ -683,14 +683,15 @@ Synchronous write
 
 
 
+
 How does this happen?
----------------------
+=====================
 
 From the docstring, we know that `os.write` is a c function implemented in CPython.
-And the following code is with posix apis.
+And the following code is implemented with posix api `write`.
 
 ```c
-static Py_ssize_t
+static Py\_ssize_t
 _Py_write_impl(int fd, const void *buf, size_t count, int gil_held)
 {
     Py_ssize_t n;
@@ -766,6 +767,12 @@ _Py_write_impl(int fd, const void *buf, size_t count, int gil_held)
 
 This function is very simple. Firstly, it checks the `count` size, then calls `write` api, finally checks whether error has occurred and return written count.
 
+In python interpreter, pure c function is executed without native python stack frame overhead. Normally it can be executed faster than pure python function.
+In this benchmark, the most hottest operation is `os.write`, which runs as fast as c version `write`. Therefore the total time makes a little difference.
+Moreover the program's writing speed is limited to the disk device. However the disk device is saturated and can't write faster longer.
+
+In conslusion, any program's writing speed is limited to the storage device. When the storage device is not saturated, writing speed is direct proportion to program's execution speed.
+
 
 Reference
 =========
@@ -777,3 +784,5 @@ Reference
   * close(2)
 
   * iostat(1)
+
+  * <https://en.wikipedia.org/wiki/POSIX>
