@@ -1,6 +1,6 @@
 
-How writing to a file?
-=======================
+How to write a file?
+=====================
 
 In linux operating system, there is a [posix](https://en.wikipedia.org/wiki/POSIX) api `write`, which supports writing `count` bytes to a file.
 Before writing, we need a file descriptor which can be returned from another posix api `open`.
@@ -18,14 +18,14 @@ print(count, 'bytes data has been written.')
 os.close(fd)
 ```
 
-It's very similar as what we write with `open`, `write` and `close` apis in c. Right?
-According to python's execution speed, do these operations run slower than c? Maybe, however I need a benchmark.
+It's quite similar to how we write with `open`, `write` and `close` apis in c. Right?
+According to python's execution speed, these operations run slower than c? Probably yes, but I need a benchmark.
 
 
 Writing benchmark
 =================
 
-In order to compare writing speed between python and c, I have written two programs in python and c.
+In order to comparing writing speed between python and c, I have written two programs in python and c.
 All programs can be found at <https://github.com/justdoit0823/notes/tree/master/python/code-sample/how-the-write-function-in-python-runs-as-fast-as-that-in-c>.
 
 
@@ -34,16 +34,18 @@ Asynchronous write
 
 ### Test on macOS ###
 
+Firstly, I ran the benchmark on my MacBook Pro. And the system info is `Darwin yusenbindeMacBook-Pro.local 17.2.0 Darwin Kernel Version 17.2.0: Fri Sep 29 18:27:05 PDT 2017; root:xnu-4570.20.62~3/RELEASE_X86_64 x86_64`.
+
 
   * C version
 
-Firstly, I run the benchmark on my MacBook Pro. And the system info is `Darwin yusenbindeMacBook-Pro.local 17.2.0 Darwin Kernel Version 17.2.0: Fri Sep 29 18:27:05 PDT 2017; root:xnu-4570.20.62~3/RELEASE_X86_64 x86_64`.
+Test bash script,
 
 ```bash
 for i in `seq 5`; do time ./disk-io-benchmark 10737418240 4096; done
 ```
 
-And the result is,
+The test output,
 
 ```
 write to temp file /tmp/disk-io-TiW39H .
@@ -78,7 +80,7 @@ user	0m0.357s
 sys	0m21.333s
 ```
 
-The related disk io statistic,
+The disk io statistic,
 
 ```
               disk0       cpu    load average
@@ -127,16 +129,20 @@ The related disk io statistic,
    63.81 6409 399.36   6 40 53  2.81 1.97 1.77
 ```
 
-Obviously, the most writing speed is at `451 MB/s`, and the most cpu time is spent in kernel mode.
+Obviously, the fastest writing speed is at `451 MB/s`, and the most of cpu time is spent in kernel context.
 
 
   * Python version
 
 The test python info is `Python 3.6.0 [GCC 4.2.1 Compatible Apple LLVM 8.0.0 (clang-800.0.42.1)]`.
 
+The test bash script,
+
 ```
 for i in `seq 5`; do time python disk-io-benchmark.py 10737418240 4096; done
 ```
+
+Test output,
 
 ```
 successfully write 10737418240 bytes.
@@ -166,6 +172,7 @@ user	0m1.923s
 sys	0m20.506s
 ```
 
+The disk io statistic,
 
 ```
               disk0       cpu    load average
@@ -230,21 +237,22 @@ sys	0m20.506s
     0.00    0  0.00   1  1 98  3.49 2.64 2.21
 ```
 
+I will discuss more details later.
 
 
 ### Test on ubuntu ###
 
-Next, I run the benchmark on my ubuntu server, the system info is `Linux justdoit-thinkpad-e420 4.13.0-16-lowlatency #19-Ubuntu SMP PREEMPT Wed Oct 11 19:51:52 UTC 2017 x86_64 x86_64 x86_64 GNU/Linux`.
+Next, I ran the benchmark on my ubuntu server. And the system info is `Linux justdoit-thinkpad-e420 4.13.0-16-lowlatency #19-Ubuntu SMP PREEMPT Wed Oct 11 19:51:52 UTC 2017 x86_64 x86_64 x86_64 GNU/Linux`.
 
   * C version
 
-Test bash scripts,
+Test bash script,
 
 ```bash
 for i in `seq 5`; do time ./disk-io-benchmark 1073741824 4096; done
 ```
 
-The result is,
+The test output,
 
 ```
 write to temp file /tmp/disk-io-18DaYE .
@@ -279,7 +287,7 @@ user	0m0.051s
 sys	0m3.110s
 ```
 
-And the related io statistic,
+And the disk io statistic,
 
 ```
 avg-cpu:  %user   %nice %system %iowait  %steal   %idle
@@ -486,25 +494,27 @@ sda              0.00  104.00      0.00  79052.00     0.00    49.00   0.00  32.0
 scd0             0.00    0.00      0.00      0.00     0.00     0.00   0.00   0.00    0.00    0.00   0.00     0.00     0.00   0.00   0.00
 ```
 
-And the most writing speed is at `82MB/s`. From document of the command `iostat`, the `%util` value is explained as the followed.
+And the fastest writing speed is at `82MB/s`. From document of the command `iostat`, the `%util` value is explained as the followed.
 
 >%util
 >                     Percentage of elapsed time during which I/O requests were issued to the device (bandwidth utilization for the device). Device saturation occurs  when  this
 >                     value is close to 100% for devices serving requests serially.  But for devices serving requests in parallel, such as RAID arrays and modern SSDs, this num‐
 >                     ber does not reflect their performance limits.
 
-So the disk's writing speed is saturating.
+So the disk's writing speed is saturated.
 
 
   * Python version
 
 The python info is `Python 3.6.3 [GCC 7.2.0]`.
 
+Test bash script,
+
 ```bash
 for i in `seq 5`; do time python disk-io-benchmark.py 10737418240 4096; done
 ```
 
-
+Test output,
 
 ```
 successfully write 1073741824 bytes.
@@ -533,6 +543,8 @@ real	0m12.824s
 user	0m0.728s
 sys	0m3.240s
 ```
+
+The disk io statistic,
 
 
 ```
@@ -677,11 +689,150 @@ sda              0.00    0.00      0.00      0.00     0.00     0.00   0.00   0.0
 scd0             0.00    0.00      0.00      0.00     0.00     0.00   0.00   0.00    0.00    0.00   0.00     0.00     0.00   0.00   0.00
 ```
 
+To compare the results of these two versions, it's clear that the writing speed in python is almost similar to that in c.
+This may be surprising to some of you, as the c program is far faster than python program. However here they are both limited to the disk's speed.
+
 
 Synchronous write
 -----------------
 
+Out of curiosity, I tested the synchronous write speed. The following is test bash script.
 
+```bash
+for i in `seq 5`; do time ./disk-io-benchmark 1073741824 4096 1; done
+```
+
+The test output,
+
+```
+write to temp file /tmp/disk-io-B7Czy0 .
+successfully write 1073741824 bytes.
+
+real	0m20.787s
+user	0m0.075s
+sys	0m12.432s
+write to temp file /tmp/disk-io-3hgLlw .
+successfully write 1073741824 bytes.
+
+real	0m19.130s
+user	0m0.067s
+sys	0m11.469s
+write to temp file /tmp/disk-io-mg6IQv .
+successfully write 1073741824 bytes.
+
+real	0m18.813s
+user	0m0.064s
+sys	0m11.221s
+write to temp file /tmp/disk-io-qyPr7o .
+successfully write 1073741824 bytes.
+
+real	0m19.285s
+user	0m0.069s
+sys	0m11.543s
+write to temp file /tmp/disk-io-alIXsf .
+successfully write 1073741824 bytes.
+
+real	0m18.524s
+user	0m0.062s
+sys	0m11.015s
+```
+
+
+The disk io statistic,
+
+```
+              disk0       cpu    load average
+    KB/t  tps  MB/s  us sy id   1m   5m   15m
+   52.97    4  0.22   7  5 88  0.97 1.68 2.28
+    0.00    0  0.00   7  4 90  0.97 1.68 2.28
+    4.04 8765 34.59  13 23 63  0.97 1.68 2.28
+    4.00 13764 53.77   6 24 71  0.97 1.68 2.28
+    4.00 14178 55.38   5 24 71  0.97 1.68 2.28
+    4.00 13854 54.12   7 25 68  0.97 1.67 2.27
+    4.00 14360 56.10   5 24 71  0.97 1.67 2.27
+    4.00 14699 57.42   3 23 74  0.97 1.67 2.27
+    4.00 14460 56.55   3 23 74  0.97 1.67 2.27
+    4.00 14795 57.79   3 23 74  0.97 1.67 2.27
+    4.00 14465 56.51   5 24 72  0.97 1.66 2.27
+    4.00 14533 56.77   5 23 72  0.97 1.66 2.27
+    4.00 14231 55.59   6 24 70  0.97 1.66 2.27
+    4.00 11833 46.22  20 28 52  0.97 1.66 2.27
+    5.17 7464 37.68  26 33 41  0.97 1.66 2.27
+    4.00 7619 29.78  23 31 46  1.13 1.68 2.27
+    4.00 8642 33.76  18 29 53  1.13 1.68 2.27
+    4.01 7471 29.25  24 31 44  1.13 1.68 2.27
+    4.00 13963 54.60   6 24 70  1.13 1.68 2.27
+    4.00 13723 53.61   6 25 68  1.13 1.68 2.27
+              disk0       cpu    load average
+    KB/t  tps  MB/s  us sy id   1m   5m   15m
+    4.06 14031 55.63   7 24 70  1.12 1.67 2.26
+    4.13 13365 53.91   6 28 66  1.12 1.67 2.26
+    4.04 13022 51.43   6 25 68  1.12 1.67 2.26
+    4.02 9595 37.70   5 26 69  1.12 1.67 2.26
+    4.00 13979 54.61   5 25 70  1.12 1.67 2.26
+    4.00 13997 54.67   6 26 68  1.11 1.66 2.25
+    4.00 13612 53.17   8 26 65  1.11 1.66 2.25
+    4.00 14052 54.89   5 26 69  1.11 1.66 2.25
+    4.00 13246 51.80  10 26 64  1.11 1.66 2.25
+    4.09 13400 53.57   9 26 65  1.11 1.66 2.25
+    4.00 13922 54.38   6 26 68  1.26 1.68 2.26
+    4.00 14163 55.32   5 24 70  1.26 1.68 2.26
+    4.00 14117 55.14   6 24 70  1.26 1.68 2.26
+    4.00 14101 55.14   6 24 70  1.26 1.68 2.26
+    4.00 14742 57.59   3 23 74  1.26 1.68 2.26
+    4.00 14088 55.08   6 24 70  1.32 1.68 2.26
+    4.00 14259 55.71   5 24 71  1.32 1.68 2.26
+    4.00 13565 52.99  10 25 64  1.32 1.68 2.26
+    4.02 14033 55.11   7 24 70  1.32 1.68 2.26
+    4.00 14003 54.70   6 25 69  1.32 1.68 2.26
+              disk0       cpu    load average
+    KB/t  tps  MB/s  us sy id   1m   5m   15m
+    4.00 14045 54.86   6 24 70  1.30 1.67 2.25
+    4.02 14180 55.64   5 23 72  1.30 1.67 2.25
+    4.02 10075 39.53   7 26 67  1.30 1.67 2.25
+    4.00 13942 54.52   7 24 69  1.30 1.67 2.25
+    4.00 14366 56.12   5 24 72  1.30 1.67 2.25
+    4.00 14189 55.43   5 24 71  1.27 1.66 2.24
+    4.00 14033 54.82   6 24 70  1.27 1.66 2.24
+    4.00 13795 53.89   9 24 67  1.27 1.66 2.24
+    4.01 13869 54.28   5 23 72  1.27 1.66 2.24
+    4.00 14295 55.84   5 23 72  1.27 1.66 2.24
+    4.00 14090 55.05   6 24 70  1.25 1.65 2.23
+    4.37 13560 57.86   5 27 67  1.25 1.65 2.23
+    4.00 14304 55.87   6 23 71  1.25 1.65 2.23
+    4.00 14192 55.44   7 23 70  1.25 1.65 2.23
+    4.00 14129 55.19   6 23 70  1.25 1.65 2.23
+    4.00 14521 56.72   3 24 73  1.23 1.64 2.23
+    4.00 14651 57.23   3 23 73  1.23 1.64 2.23
+    4.00 14608 57.06   3 24 73  1.23 1.64 2.23
+    4.00 14311 55.95   3 24 73  1.23 1.64 2.23
+    4.00 14149 55.27   6 24 70  1.23 1.64 2.23
+              disk0       cpu    load average
+    KB/t  tps  MB/s  us sy id   1m   5m   15m
+    4.04 13180 51.98   5 24 70  1.21 1.63 2.22
+    4.00 11314 44.20   5 24 70  1.21 1.63 2.22
+    4.00 14513 56.69   4 23 74  1.21 1.63 2.22
+    4.00 14278 55.77   6 24 71  1.21 1.63 2.22
+    4.00 13690 53.54   7 24 69  1.21 1.63 2.22
+    4.00 13817 54.01   6 26 68  1.59 1.70 2.24
+    4.00 13449 52.53   8 25 67  1.59 1.70 2.24
+    4.00 12436 48.59  12 27 62  1.59 1.70 2.24
+    4.00 14305 55.88   4 24 72  1.59 1.70 2.24
+    4.00 14090 55.04   4 26 70  1.59 1.70 2.24
+    4.00 13668 53.39   7 25 67  1.55 1.69 2.23
+    4.00 13279 51.87   9 26 65  1.55 1.69 2.23
+    4.00 13972 54.64   4 24 71  1.55 1.69 2.23
+    4.00 13638 53.27   7 26 67  1.55 1.69 2.23
+    4.00 13297 51.94   9 25 66  1.55 1.69 2.23
+    4.00 13142 51.34   9 26 65  1.58 1.69 2.23
+    4.00 13979 54.61   5 25 70  1.58 1.69 2.23
+    4.00 13631 53.25   7 26 67  1.58 1.69 2.23
+    4.00 14355 56.07   4 23 73  1.58 1.69 2.23
+    4.00 14486 56.65   3 23 74  1.58 1.69 2.23
+```
+
+Beacuse time is limited, I jsut used 1G bytes data. When turning on the O_SYNC flag, the writing speed is almost ten times slower.
+For more details, you may refer to `fsync` posix api.
 
 
 How does this happen?
@@ -765,13 +916,13 @@ _Py_write_impl(int fd, const void *buf, size_t count, int gil_held)
 }
 ```
 
-This function is very simple. Firstly, it checks the `count` size, then calls `write` api, finally checks whether error has occurred and return written count.
+This function is quite simple. Firstly, it checks the `count` size, then calls `write` api, finally checks whether error has occurred and return written count.
 
 In python interpreter, pure c function is executed without native python stack frame overhead. Normally it can be executed faster than pure python function.
-In this benchmark, the most hottest operation is `os.write`, which runs as fast as c version `write`. Therefore the total time makes a little difference.
-Moreover the program's writing speed is limited to the disk device. However the disk device is saturated and can't write faster longer.
+In this benchmark, the hottest operation is `os.write`, which runs as fast as c version `write`. Therefore the total time makes a little difference.
 
-In conslusion, any program's writing speed is limited to the storage device. When the storage device is not saturated, writing speed is direct proportion to program's execution speed.
+In conslusion, any program's writing speed is limited to the storage device. When the storage device is not saturated, the writing speed is direct proportion to program's execution speed.
+Once the disk device is saturated, program can't write faster longer.
 
 
 Reference
@@ -780,6 +931,8 @@ Reference
   * open(2)
 
   * write(2)
+
+  * fsync(2)
 
   * close(2)
 
