@@ -43,6 +43,10 @@ def bind_second_server(port, inherited_fd):
 
 
 def main():
+    if len(sys.argv) < 2:
+        print('local server port is needed.')
+        return
+
     port = int(sys.argv[1])
 
     server_sock = bind_first_server(port)
