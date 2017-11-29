@@ -33,6 +33,9 @@ def bind_first_server(port):
     s_sock = bind_local_server(port)
     dup_fd = os.dup(s_sock.fileno())
     show_sock_info(s_sock, inherited_fd=dup_fd, sock_prefix='#1')
+
+    s_sock_dup = bind_local_server(port)
+    show_sock_info(s_sock_dup, sock_prefix='#1-1')
     return s_sock
 
 
