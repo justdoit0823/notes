@@ -66,7 +66,7 @@ def main():
 
     s_data = 'Hello world.'
     tcp_client_sock.send(s_data.encode())
-    print('sent data "%s".' % s_data)
+    print('sent data "%s" by tcp endpoint.' % s_data)
     show_stat_info(port)
 
     r_data = tcp_ac_sock.recv(10)
@@ -81,7 +81,7 @@ def main():
     s_data_2 = 'Explicit is better than implicit.'
     tcp_client_sock.send(s_data_1.encode())
     tcp_client_sock.send(s_data_2.encode())
-    print('\nsent data "%s%s".' % (s_data_1, s_data_2))
+    print('\nsent data "%s%s" by tcp endpoint.' % (s_data_1, s_data_2))
     show_stat_info(port)
 
     r_data = tcp_ac_sock.recv(1024)
@@ -92,12 +92,12 @@ def main():
 
     s_data = 'Hello world.'
     udp_client_sock.sendto(s_data.encode(), ('127.0.0.1', port))
-    print('sent data "%s".' % s_data)
+    print('sent data "%s" by udp endpoint.' % s_data)
     show_stat_info(port, tcp=False)
 
     s_data = 'Python zen.'
     udp_client_sock.sendto(s_data.encode(), ('127.0.0.1', port))
-    print('sent data "%s".' % s_data)
+    print('sent data "%s" by udp endpoint.' % s_data)
     show_stat_info(port, tcp=False)
 
     r_data, __ = udp_server_sock.recvfrom(20)
