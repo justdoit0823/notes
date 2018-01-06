@@ -10,6 +10,14 @@ import (
 )
 
 
+func foo() (cnt int){
+	cnt = 0
+	cnt += 1
+
+	return
+}
+
+
 func main(){
 
 	fmt.Printf("Current goroutine num %d.\n", runtime.NumGoroutine())
@@ -22,10 +30,15 @@ func main(){
 	fmt.Printf("Current goroutine num %d.\n", runtime.NumGoroutine())
 
 	first_warning := true
-	s_time := time.Now().Unix()
+	// s_time := time.Now().Unix()
 
 	for ;; {
-		if( first_warning && (time.Now().Unix() - s_time) > 3) {
+		// if( first_warning && (time.Now().Unix() - s_time) > 3) {
+		// 	fmt.Printf("%d seconds has already gone.\n", 3)
+		// 	first_warning = false
+		// }
+
+		if( first_warning && (foo() > 0)) {
 			fmt.Printf("%d seconds has already gone.\n", 3)
 			first_warning = false
 		}
