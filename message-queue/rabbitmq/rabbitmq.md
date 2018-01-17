@@ -1,6 +1,8 @@
+
 rabbitmq
 ========
-rabbitmq是实现了高级消息队列协议的开源消息代理软件，用Erlang编写而成。
+
+rabbitmq是一个使用高级消息队列协议的开源消息代理软件，用Erlang编写而成。
 
 rabbitmq的基本构成
 ==================
@@ -48,3 +50,9 @@ queue
 =====
 
 queue作为一个中间媒介来存储生产者传输过来的消息，然后进行传输给消费者。
+
+
+Reference
+=========
+
+  * <http://www.rabbitmq.com/tutorials/amqp-concepts.html>
