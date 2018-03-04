@@ -1,16 +1,11 @@
 
-"""
-非递归quick sort。
-"""
+"""非递归quick sort."""
 
 import random
 
 
 def partition(s, low, high):
-    """
-    切分函数。
-    """
-
+    """切分函数."""
     if low == high:
         return low
 
@@ -30,10 +25,7 @@ def partition(s, low, high):
 
 
 def quick_sort(s_list):
-    """
-    非递归版quick sort。
-    """
-
+    """非递归版quick sort."""
     low = 0
     high = len(s_list) - 1
     sort_partitions = {(low, high)}
@@ -47,7 +39,7 @@ def quick_sort(s_list):
 
 
 def main():
-
+    """执行主入口."""
     test_list = [random.randint(0, 10000) for i in range(1000)]
     print(test_list)
     quick_sort(test_list)
@@ -55,5 +47,4 @@ def main():
 
 
 if __name__ == '__main__':
-
     main()
