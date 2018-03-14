@@ -1,5 +1,5 @@
 
-// Algorithm quicksort in the go.
+// Algorithm quicksort written in go.
 
 
 package main
@@ -59,16 +59,11 @@ func main(){
 		elementList = append(elementList, int(rand.Int31n(int32(num) * 100)))
 	}
 
-	for _, val := range(elementList) {
-		fmt.Println(val)
-	}
+	fmt.Println(elementList)
 
 	quick_sort(elementList, 0, len(elementList) - 1)
 	fmt.Println("After quick sort...")
 
-
-	for _, val := range(elementList) {
-		fmt.Println(val)
-	}
+	fmt.Println(elementList)
 
 }
