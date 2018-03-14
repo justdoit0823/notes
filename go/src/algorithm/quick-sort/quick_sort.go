@@ -35,8 +35,8 @@ func quick_sort(eleList []int, low, high int) {
 
 	pivot := partition(eleList, low, high)
 
-	if pivot > 1 {
-		quick_sort(eleList, 0, pivot - 1)
+	if pivot > low + 1 {
+		quick_sort(eleList, low, pivot - 1)
 	}
 	if pivot + 1 < high {
 		quick_sort(eleList, pivot + 1, high)
