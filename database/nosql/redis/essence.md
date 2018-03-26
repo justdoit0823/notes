@@ -48,6 +48,8 @@ Data types
   * HyperLogLog
 
 
+
+
 Read more detail at [data-types-intro](https://redis.io/topics/data-types-intro).
 
 
@@ -131,6 +133,8 @@ Log rewriting uses the same copy-on-write trick already in use for snapshotting.
   * the server may not reproduce exactly the same dataset on reloading due to rare bugs in the log.
 
 
+
+
 Read more detail at [persistence](https://redis.io/topics/persistence).
 
 
@@ -205,6 +209,8 @@ Replication pitfalls
 **Writable slaves before version 4.0 were incapable of expiring keys with a time to live set.**
 
 
+
+
 Read more detail at [replication](https://redis.io/topics/replication).
 
 
@@ -265,6 +271,8 @@ Disadvantages
   * adding and removing capacity can be complex
 
 
+
+
 Read more detail at [partitioning](https://redis.io/topics/partitioning).
 
 
@@ -287,6 +295,8 @@ Data Sharding
 >There are 16384 hash slots in Redis Cluster, and to compute what is the hash slot of a given key, we simply take the CRC16 of the key modulo 16384.
 >
 >Every node in a Redis Cluster is responsible for a subset of the hash slots.
+
+
 
 
 Read more detail at [cluster-tutorial](https://redis.io/topics/cluster-tutorial).
