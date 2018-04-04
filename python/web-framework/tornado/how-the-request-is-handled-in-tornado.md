@@ -51,7 +51,7 @@ Incoming request
 
 ### Handle connection ###
 
-  * initialize IOStream with accepted connection
+  * initialize IOStream with accepted socket
 
 
 ### Handle stream ###
