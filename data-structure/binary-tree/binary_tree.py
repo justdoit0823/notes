@@ -44,6 +44,7 @@ class Node:
         self._right = node
 
     def traverse(self):
+        """Traverse the binary tree preorder."""
         print(self.value)
 
         left_node = self.left
@@ -54,7 +55,46 @@ class Node:
         if right_node is not None:
             right_node.traverse()
 
-    def bsf_traverse(self):
+    def inorder_traverse(self):
+        """Traverse the binary tree in order."""
+        queue = deque()
+        queue.append((self, True))
+
+        while queue:
+            node, recursive = queue.pop()
+            if not recursive:
+                print(node.value)
+                continue
+
+            while node is not None:
+                right_node = node.right
+                if right_node:
+                    queue.append((right_node, True))
+
+                queue.append((node, False))
+                node = node.left
+
+    def postorder_traverse(self):
+        """Traverse the binary tree postorder."""
+        queue = deque()
+        queue.append((self, True))
+
+        while queue:
+            node, recursive = queue.pop()
+            if not recursive:
+                print(node.value)
+                continue
+
+            while node is not None:
+                queue.append((node, False))
+                right_node = node.right
+                if right_node:
+                    queue.append((right_node, True))
+
+                node = node.left
+
+    def bfs_traverse(self):
+        """Traverse the binary tree bfs."""
         child_nodes = [[self]]
         val_list = []
 
@@ -114,9 +154,18 @@ def main():
         p_idx += 1
 
     root_node = parent_nodes[0][0]
+
+    print('Preorder traverse...')
     root_node.traverse()
 
-    root_node.bsf_traverse()
+    print('BFS traverse...')
+    root_node.bfs_traverse()
+
+    print('Inorder traverse...')
+    root_node.inorder_traverse()
+
+    print('Postorder traverse...')
+    root_node.postorder_traverse()
 
 
 if __name__ == '__main__':
