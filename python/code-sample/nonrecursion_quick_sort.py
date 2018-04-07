@@ -2,6 +2,7 @@
 """非递归quick sort."""
 
 import random
+import sys
 
 
 def partition(s, low, high):
@@ -40,7 +41,12 @@ def quick_sort(s_list):
 
 def main():
     """执行主入口."""
-    test_list = [random.randint(0, 10000) for i in range(1000)]
+    if len(sys.argv) == 1:
+        test_num = 10000
+    else:
+        test_num = int(sys.argv[1])
+
+    test_list = [random.randint(0, 10000) for i in range(test_num)]
     print(test_list)
     quick_sort(test_list)
     print(test_list)
