@@ -1,10 +1,11 @@
 
 """Estimate redis memory occupation module."""
 
+import string
+
 import click
 import random
 import redis
-import string
 
 
 TOTAL_LETTERS = string.ascii_letters + string.digits
