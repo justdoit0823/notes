@@ -5,3 +5,6 @@
 *.tox*
 *.cache*
 *.DS_Store
+
+*build/
+*.egg-info/
