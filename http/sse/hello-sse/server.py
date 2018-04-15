@@ -24,6 +24,7 @@ def get_random_string(length):
 
 async def _shutdown(*args):
     """Shutdown cleaner."""
+    print('shutdown...')
     _shutdown_event.set()
 
 
@@ -48,8 +49,12 @@ async def sse_handler(request):
 
     async with sse_response(request) as resp:
         while not _shutdown_event.is_set():
-            msg = await c_queue.get()
-            await resp.send(msg)
+            try:
+                msg = c_queue.get_nowait()
+            except asyncio.QueueEmpty:
+                await asyncio.sleep(0.2)
+            else:
+                await resp.send(msg)
 
     return resp
 
