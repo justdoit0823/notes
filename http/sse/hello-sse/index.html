@@ -1,0 +1,18 @@
+<html>
+  <head>
+    <script type="text/javascript"
+            src="http://code.jquery.com/jquery.min.js"></script>
+    <script type="text/javascript">
+      var evtSource = new EventSource("/sse?token={{token}}");
+      evtSource.onmessage = function(e) {
+      $('#response').append('<div>' + e.data + '</div>');
+      }
+      
+    </script>
+  </head>
+  <body>
+    <h1>Response from server:</h1>
+    <div>client: {{token}}</div>
+    <div id="response"></div>
+  </body>
+</html>
