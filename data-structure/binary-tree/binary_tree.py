@@ -121,6 +121,16 @@ class Node:
             print(' ' * 2 ** (level_num - idx + 1) + (
                 ' ' * 2 ** (level_num - idx + 2)).join(map(str, level_val)))
 
+    def invert(self):
+        """Invert the binary tree."""
+        self._left, self._right = self._right, self._left
+
+        if self._left:
+            self._left.invert()
+
+        if self._right:
+            self._right.invert()
+
 
 def main():
     level = random.randint(1, 5)
@@ -166,6 +176,11 @@ def main():
 
     print('Postorder traverse...')
     root_node.postorder_traverse()
+
+    root_node.invert()
+    print('BFS traverse the inverted tree...')
+    root_node.bfs_traverse()
+
 
 
 if __name__ == '__main__':
