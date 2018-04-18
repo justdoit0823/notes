@@ -1,0 +1,4 @@
+
+"""Example module."""
+
+foo = 'example'
