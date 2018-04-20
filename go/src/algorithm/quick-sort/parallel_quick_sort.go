@@ -31,16 +31,27 @@ func partition(eleList []int, low, high int) (int) {
 }
 
 
-func quick_sort(eleList []int, low, high int) {
+func quick_sort(eleList []int, low, high int, e chan int) {
 
 	pivot := partition(eleList, low, high)
 
+	e1 := make(chan int, 2)
+
 	if pivot > low + 1 {
-		go quick_sort(eleList, low, pivot - 1)
+		go quick_sort(eleList, low, pivot - 1, e1)
 	}
 	if pivot + 1 < high {
-		go quick_sort(eleList, pivot + 1, high)
+		go quick_sort(eleList, pivot + 1, high, e1)
 	}
+
+	if pivot > low + 1 {
+		<- e1
+	}
+	if pivot + 1 < high {
+		<- e1
+	}
+
+	e <- 1
 }
 
 
@@ -59,9 +70,12 @@ func main(){
 		elementList = append(elementList, int(rand.Int31n(int32(num) * 100)))
 	}
 
+	e := make(chan int, 2)
+
 	fmt.Println(elementList)
 
-	quick_sort(elementList, 0, len(elementList) - 1)
+	quick_sort(elementList, 0, len(elementList) - 1, e)
+	<- e
 	fmt.Println("After quick sort...")
 
 	fmt.Println(elementList)
