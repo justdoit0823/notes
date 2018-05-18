@@ -53,23 +53,23 @@ def shortest_path(from_vertex, to_vertex):
     vertex_queue = deque()
     vertex_queue.append((None, from_vertex))
 
-    weight_map = {None: (0, None), from_vertex: (0, None)}
+    weight_map = {from_vertex: (0, None)}
 
     while vertex_queue:
-        prev_vertex, cur_vertex = vertex_queue.popleft()
+        cur_vertex = vertex_queue.popleft()[1]
 
         for edge in cur_vertex.neighbors:
             next_vertex = edge.to
             to_weight = edge.weight
-            prev_weight = weight_map[prev_vertex][0]
-            new_weight = prev_weight + to_weight
+            cur_weight = weight_map[cur_vertex][0]
+            new_weight = cur_weight + to_weight
 
             try:
-                cur_weight = weight_map[next_vertex][0]
+                cur_next_weight = weight_map[next_vertex][0]
             except KeyError:
                 weight_map[next_vertex] = (new_weight, cur_vertex)
             else:
-                if new_weight < cur_weight:
+                if new_weight < cur_next_weight:
                     weight_map[next_vertex] = (new_weight, cur_vertex)
 
             if next_vertex != to_vertex:
