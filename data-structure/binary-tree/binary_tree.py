@@ -55,6 +55,25 @@ class Node:
         if right_node is not None:
             right_node.traverse()
 
+    def max_depth(self):
+        """Return the tree's max depth."""
+        def _depth(node, level, ret):
+            left_node = node.left
+            if left_node is not None:
+                _depth(left_node, level + 1, ret)
+
+            right_node = node.right
+            if right_node is not None:
+                _depth(left_node, level + 1, ret)
+
+            if not any((left_node, right_node)) and level > ret[0]:
+                ret[0] = level
+
+        ret = [1]
+        _depth(self, 1, ret)
+
+        return ret[0]
+
     def inorder_traverse(self):
         """Traverse the binary tree in order."""
         queue = deque()
