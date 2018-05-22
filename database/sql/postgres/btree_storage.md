@@ -25,6 +25,10 @@ Getting the index meta data with the following sql,
 
 ```
 select * from bt_metap('index_name');
+
+ magic  | version | root | level | fastroot | fastlevel
+--------+---------+------+-------+----------+-----------
+ 340322 |       2 |  412 |     2 |      412 |         2
 ```
 
 The field `root` is the index root block.
@@ -57,6 +61,8 @@ Non leaf block
 ### Non rightmost non-leaf block ###
 
 ```
+ itemoffset |   ctid   | itemlen | nulls | vars |          data
+------------+----------+---------+-------+------+-------------------------
           1 | (574,1) |      16 | f     | f    | ed 2e 03 00 00 00 00 00
           2 | (287,1) |       8 | f     | f    |
           3 | (288,1) |      16 | f     | f    | e5 98 01 00 00 00 00 00
@@ -83,6 +89,8 @@ The first item is the high key. The second item has no data, and all items withi
 ### Rightmost non leaf block ###
 
 ```
+ itemoffset |   ctid   | itemlen | nulls | vars |          data
+------------+----------+---------+-------+------+-------------------------
           1 | (2576,1) |       8 | f     | f    |
           2 | (2577,1) |      16 | f     | f    | 95 54 0e 00 00 00 00 00
           3 | (2578,1) |      16 | f     | f    | 03 56 0e 00 00 00 00 00
@@ -102,6 +110,8 @@ Leaf block
 ------------
 
 ```
+ itemoffset |   ctid   | itemlen | nulls | vars |          data
+------------+----------+---------+-------+------+-------------------------
           1 | (463,39)  |      16 | f     | f    | e5 98 01 00 00 00 00 00
           2 | (461,125) |      16 | f     | f    | 77 97 01 00 00 00 00 00
           3 | (461,126) |      16 | f     | f    | 78 97 01 00 00 00 00 00
@@ -116,6 +126,39 @@ Leaf block
 
 The first block item is high key. The left block items point to the related relation tuples.
 
+
+How to do my own inspection
+===========================
+
+  * install pageinspect extension
+
+```sql
+create extension pageinspect;
+```
+
+  * create test table
+
+```sql
+create table s_test_bt_index(id bigint primary key);
+```
+
+  * feed the test data
+
+```sql
+insert into s_test_bt_index select id from generate_series(1, 100000) as id;
+```
+
+  * Get the meta data
+
+```sql
+select * from bt_metap('s_test_bt_index_pkey');
+```
+
+  * Get block data
+
+```sql
+select * from bt_page_items('s_test_bt_index_pkey', 1);
+```
 
 
 Reference
