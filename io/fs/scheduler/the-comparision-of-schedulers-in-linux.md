@@ -6,6 +6,9 @@ Scheduler
 >I/O scheduling is sometimes called disk scheduling.
 
 
+Read more detail at [I/O scheduling](https://en.wikipedia.org/wiki/I/O_scheduling).
+
+
 Deadline Scheduler
 ------------------
 
@@ -20,6 +23,9 @@ Read queues are given a higher priority, because processes usually block on read
 Next, the deadline scheduler checks if the first request in the deadline queue has expired. Otherwise, the scheduler serves a batch of requests from the sorted queue. In both cases, the scheduler also serves a batch of requests following the chosen request in the sorted queue.
 
 By default, read requests have an expiration time of 500 ms, write requests expire in 5 seconds.
+
+
+Read more detail at [Deadline scheduler](https://en.wikipedia.org/wiki/Deadline_scheduler).
 
 
 Noop Scheduler
@@ -39,6 +45,9 @@ Three basic situations,
   * Read/Write head movement doesn't impact application performance enough to justify the reordering overhead.
 
 
+Read more detail at [Noop scheduler](https://en.wikipedia.org/wiki/Noop_scheduler).
+
+
 CFQ Scheduler
 -------------
 
@@ -50,6 +59,9 @@ While CFQ does not do explicit anticipatory I/O scheduling, it achieves the same
 It can be considered a natural extension of granting I/O time slices to a process.
 
 
+Read more detail at [CFQ scheduler](https://en.wikipedia.org/wiki/CFQ).
+
+
 Anticipatory Scheduler
 ----------------------
 
@@ -57,6 +69,9 @@ Anticipatory Scheduler
 
 
 "Deceptive idleness" is a situation where a process appears to be finished reading from the disk when it is actually processing data in preparation of the next read operation.
+
+
+Read more detail at [Anticipatory scheduler](https://en.wikipedia.org/wiki/Anticipatory_scheduling).
 
 
 Elevator Scheduler
@@ -67,6 +82,9 @@ From an implementation perspective, the drive maintains a buffer of pending read
 When a new request arrives while the drive is idle, the initial arm/head movement will be in the direction of the cylinder where the data is stored, either in or out.
 As additional requests arrive, requests are serviced only in the current direction of arm movement until the arm reaches the edge of the disk.
 When this happens, the direction of the arm reverses, and the requests that were remaining in the opposite direction are serviced, and so on.
+
+
+Read more detail at [Elevator scheduler](https://en.wikipedia.org/wiki/Elevator_algorithm).
 
 
 Reference
