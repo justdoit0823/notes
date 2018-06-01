@@ -21,6 +21,8 @@ def dup_socket():
     new_fd = os.dup(s_sock.fileno())
     show_fd_info(new_fd)
 
+    return s_sock
+
 
 def dup_file():
     fd = os.open('/proc/cpuinfo', os.O_RDONLY)
@@ -29,10 +31,24 @@ def dup_file():
     new_fd = os.dup(fd)
     show_fd_info(new_fd)
 
+    return fd
+
 
 def main():
-    dup_socket()
-    dup_file()
+    s_sock = dup_socket()
+    fd = dup_file()
+
+    pid = os.fork()
+    if pid == -1:
+        raise RuntimeError
+
+    if pid == 0:
+        show_fd_info(fd)
+        show_fd_info(s_sock.fileno())
+    else:
+        os.waitpid(pid, 0)
+
+    os.close(fd)
 
 
 if __name__ == '__main__':
