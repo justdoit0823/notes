@@ -18,20 +18,20 @@ import (
 
 
 type CmdArgs struct {
-	Connections int
-	Duration int
-	Threads int
-	LatencyStat bool
+	connections int
+	duration int
+	threads int
+	latencyStat bool
 }
 
 
 func defineCommand(c *CmdArgs) *flag.FlagSet {
 	f := flag.NewFlagSet("hb", flag.ExitOnError)
 
-	f.IntVar(&c.Connections, "c", 0, "Concurrent `connections`.")
-	f.IntVar(&c.Duration, "d", 0, "Benchmark `duration`.")
-	f.IntVar(&c.Threads, "t", 0, "Benchmark `threads`.")
-	f.BoolVar(&c.LatencyStat, "latency", false, "Show latency statistic.")
+	f.IntVar(&c.connections, "c", 0, "Concurrent `connections`.")
+	f.IntVar(&c.duration, "d", 0, "Benchmark `duration`.")
+	f.IntVar(&c.threads, "t", 0, "Benchmark `threads`.")
+	f.BoolVar(&c.latencyStat, "latency", false, "Show latency statistic.")
 
 	return f
 }
@@ -44,8 +44,8 @@ func usage(f flag.FlagSet) {
 
 
 func initEnvironment(c CmdArgs) {
-	if c.Threads > 0 {
-		runtime.GOMAXPROCS(c.Threads)
+	if c.threads > 0 {
+		runtime.GOMAXPROCS(c.threads)
 	}
 }
 
@@ -113,13 +113,13 @@ func main() {
 		return
 	}
 
-	if c.Connections <= 0 {
+	if c.connections <= 0 {
 		fmt.Println("Connections must be greater than zero.")
 		usage(*f)
 		return
 	}
 
-	if c.Duration <= 0 {
+	if c.duration <= 0 {
 		fmt.Println("Duration must be greater than zero.")
 		usage(*f)
 		return
@@ -139,15 +139,17 @@ func main() {
 
 	initEnvironment(c)
 
+	fmt.Printf("Run benchmark on endpoint %s.\n", url)
+
 	var workers []*Worker
 
-	for i := 0; i < c.Connections; i ++ {
+	for i := 0; i < c.connections; i ++ {
 		w := NewWorker()
 		go w.Run(url)
 		workers = append(workers, w)
 	}
 
-	t := time.NewTimer(time.Duration(c.Duration) * time.Second)
+	t := time.NewTimer(time.Duration(c.duration) * time.Second)
 	<- t.C
 
 	var durations []float64
@@ -170,7 +172,7 @@ func main() {
 
 	n := len(durations)
 
-	fmt.Printf("Finished requests %d within %d seconds, average %d/s.\n", n, c.Duration, n / c.Duration)
+	fmt.Printf("Finished requests %d within %d seconds, average %d/s.\n", n, c.duration, n / c.duration)
 	if n > 0 {
 		fmt.Printf("Min duration %fms, max duration %fms, avg duration %fms.\n", durations[0], durations[n - 1], total_duration / float64(len(durations)))
 	}
