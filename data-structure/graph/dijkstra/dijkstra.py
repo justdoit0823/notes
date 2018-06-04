@@ -2,6 +2,7 @@
 """Dijkstra algorithm."""
 
 from collections import deque
+import math
 
 
 class Edge:
@@ -69,7 +70,9 @@ def shortest_path(from_vertex, to_vertex):
             except KeyError:
                 weight_map[next_vertex] = (new_weight, cur_vertex)
             else:
-                if new_weight < cur_next_weight:
+                if new_weight > cur_next_weight:
+                    continue
+                elif new_weight < cur_next_weight:
                     weight_map[next_vertex] = (new_weight, cur_vertex)
 
             if next_vertex != to_vertex:
@@ -84,8 +87,33 @@ def shortest_path(from_vertex, to_vertex):
     return path
 
 
-def main():
+def shortest_path_v2(from_vertex, to_vertex, all_vertex):
+    """Search for the shortest path from vertex a to vertex b based on priority queue."""
+    vertex_queue = {}
 
+    for vertex in all_vertex:
+        vertex_queue[vertex] = math.inf
+
+    vertex_queue[from_vertex] = 0
+
+    while vertex_queue:
+        vertex, distance = sorted(vertex_queue.items(), key=lambda w: w[1])[0]
+        if vertex is to_vertex:
+            break
+
+        vertex_queue.pop(vertex)
+        for edge in vertex.neighbors:
+            next_vertex = edge.to
+            to_weight = edge.weight
+            next_weight = distance + to_weight
+            if next_weight < vertex_queue[next_vertex]:
+                vertex_queue[next_vertex] = next_weight
+
+    return distance
+
+
+def first_shortest_path_example():
+    """First shortest path example."""
     a_vertex = Vertex('A')
 
     b_vertex = Vertex('B')
@@ -139,6 +167,91 @@ def main():
                 continue
 
     print('shortest path', ' -> '.join(map(lambda v: v.id, path)), 'total weight', total_weight)
+    total_weight_v2 = shortest_path_v2(a_vertex, f_vertex, (
+        a_vertex, b_vertex, c_vertex, d_vertex, e_vertex, f_vertex))
+    assert total_weight_v2 == total_weight
+
+
+def second_shortest_path_example():
+    """Second shortest path example."""
+    a_vertex = Vertex('A')
+
+    b_vertex = Vertex('B')
+    edge_a_b = Edge(a_vertex, b_vertex, 7)
+    a_vertex + edge_a_b
+
+    c_vertex = Vertex('C')
+
+    edge_a_c = Edge(a_vertex, c_vertex, 4)
+    a_vertex + edge_a_c
+
+    d_vertex = Vertex('D')
+
+    edge_b_d = Edge(b_vertex, d_vertex, 2)
+    b_vertex + edge_b_d
+
+    edge_c_d = Edge(c_vertex, d_vertex, 11)
+    c_vertex + edge_c_d
+
+    e_vertex = Vertex('E')
+
+    edge_b_e = Edge(b_vertex, e_vertex, 5)
+    b_vertex + edge_b_e
+
+    f_vertex = Vertex('F')
+
+    edge_d_f = Edge(d_vertex, f_vertex, 3)
+    d_vertex + edge_d_f
+
+    g_vertex = Vertex('G')
+
+    edge_c_g = Edge(c_vertex, g_vertex, 9)
+    c_vertex + edge_c_g
+
+    edge_f_g = Edge(f_vertex, g_vertex, 8)
+    f_vertex + edge_f_g
+
+    h_vertex = Vertex('H')
+
+    edge_e_h = Edge(e_vertex, h_vertex, 4)
+    e_vertex + edge_e_h
+
+    edge_f_h = Edge(f_vertex, h_vertex, 2)
+    f_vertex + edge_f_h
+
+    i_vertex = Vertex('I')
+
+    edge_h_i = Edge(h_vertex, i_vertex, 6)
+    h_vertex + edge_h_i
+
+    edge_g_i = Edge(g_vertex, i_vertex, 1)
+    g_vertex + edge_g_i
+
+    path = shortest_path(a_vertex, h_vertex)
+    total_weight = 0
+    for idx, vertex in enumerate(path):
+        vertex = path[idx]
+        if idx == len(path) - 1:
+            next_vertex = h_vertex
+        else:
+            next_vertex = path[idx + 1]
+
+        for edge in vertex.neighbors:
+            if edge.to == next_vertex:
+                total_weight += edge.weight
+                continue
+
+    print('shortest path', ' -> '.join(map(lambda v: v.id, path)), 'total weight', total_weight)
+    total_weight_v2 = shortest_path_v2(a_vertex, h_vertex, (
+        a_vertex, b_vertex, c_vertex, d_vertex, e_vertex, f_vertex, g_vertex,
+        h_vertex, i_vertex))
+    assert total_weight_v2 == total_weight
+
+
+def main():
+    """Main entry."""
+    first_shortest_path_example()
+    second_shortest_path_example()
 
 
 if __name__ == '__main__':
