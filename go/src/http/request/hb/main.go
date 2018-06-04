@@ -22,6 +22,7 @@ type CmdArgs struct {
 	duration int
 	threads int
 	latencyStat bool
+	cpuProfile bool
 }
 
 
@@ -31,7 +32,8 @@ func defineCommand(c *CmdArgs) *flag.FlagSet {
 	f.IntVar(&c.connections, "c", 0, "Concurrent `connections`.")
 	f.IntVar(&c.duration, "d", 0, "Benchmark `duration`.")
 	f.IntVar(&c.threads, "t", 0, "Benchmark `threads`.")
-	f.BoolVar(&c.latencyStat, "latency", false, "Show latency statistic.")
+	f.BoolVar(&c.latencyStat, "latency", false, "`Show latency statistic.`")
+	f.BoolVar(&c.cpuProfile, "cpu-profile", false, "`Enable cpu profile.`")
 
 	return f
 }
@@ -125,17 +127,19 @@ func main() {
 		return
 	}
 
-	cf, err := os.Create("hb.profile")
-	if err != nil {
-		fmt.Println("Create CPU profile failed.");
-		return
-	}
+	if c.cpuProfile {
+		cf, err := os.Create("hb.profile")
+		if err != nil {
+			fmt.Println("Create CPU profile failed.");
+			return
+		}
 
-	if err := pprof.StartCPUProfile(cf); err != nil {
-		fmt.Println("Start CPU profile failed.")
-		return
+		if err := pprof.StartCPUProfile(cf); err != nil {
+			fmt.Println("Start CPU profile failed.")
+			return
+		}
+		defer pprof.StopCPUProfile()
 	}
-	defer pprof.StopCPUProfile()
 
 	initEnvironment(c)
 
