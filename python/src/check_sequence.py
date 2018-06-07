@@ -14,6 +14,10 @@ def check_chunck_seq(i_tuple, size):
 
 
 def main():
+    size = 10
+    if len(sys.argv) > 1:
+        size = int(sys.argv[1])
+
     output = sys.stdin.read()
     i_tuple = tuple(map(int, output[1: -2].split(',')))
 
