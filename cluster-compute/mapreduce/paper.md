@@ -10,8 +10,8 @@ Primitives
 
   * Map
 
-Map, written by the user, takes an input pair and pro- duces a set of intermediate key/value pairs.
-The MapRe- duce library groups together all intermediate values asso- ciated with the same intermediate key I and passes them to the Reduce function.
+Map, written by the user, takes an input pair and produces a set of intermediate key/value pairs.
+The MapReduce library groups together all intermediate values associated with the same intermediate key I and passes them to the Reduce function.
 
   * Reduce
 
@@ -27,8 +27,8 @@ A worker who is assigned a map task reads the contents of the corresponding inpu
 
   * Reduce
 
-When a reduce worker has read all in- termediate data, it sorts it by the intermediate keys so that all occurrences of the same key are grouped together. The sorting is needed because typically many different keys map to the same reduce task.
-The reduce worker iterates over the sorted intermediate data and for each unique intermediate key en- countered, it passes the key and the corresponding set of intermediate values to the user’s Reduce func- tion. The output of the Reduce function is appended to a final output file for this reduce partition.
+When a reduce worker has read all intermediate data, it sorts it by the intermediate keys so that all occurrences of the same key are grouped together. The sorting is needed because typically many different keys map to the same reduce task.
+The reduce worker iterates over the sorted intermediate data and for each unique intermediate key encountered, it passes the key and the corresponding set of intermediate values to the user’s Reduce func- tion. The output of the Reduce function is appended to a final output file for this reduce partition.
 
 
 Worker
@@ -50,13 +50,13 @@ Data
 
   * Input file
 
-The MapReduce library in the user program first splits the input files into M pieces of typically 16 megabytes to 64 megabytes (MB) per piece (con- trollable by the user via an optional parameter).
+The MapReduce library in the user program first splits the input files into M pieces of typically 16 megabytes to 64 megabytes (MB) per piece (controllable by the user via an optional parameter).
 
   * Intermediate file
 
-The interme- diate key/value pairs produced by the Map function are buffered in memory.
-Periodically, the buffered pairs are written to local disk, partitioned into R regions by the partitioning function.
-The reduce worker uses remote procedure calls to read the buffered data from the local disks of the map workers.
+The intermediate key/value pairs produced by the Map function are buffered in memory. Periodically, the buffered pairs are written to local disk, partitioned into R regions by the partitioning function.
+So there are finally `M x R` intermediate files, which will be used by the reduce worker later.
+The reduce worker uses remote procedure calls to read the related buffered data from the local disks of the map workers.
 
 
 Fault Tolerance
@@ -64,7 +64,7 @@ Fault Tolerance
 
   * Worker failure
 
-The master pings every worker periodically. If no re- sponse is received from a worker in a certain amount of time, the master marks the worker as failed. Any map tasks completed by the worker are reset back to their ini- tial idle state, and therefore become eligible for schedul- ing on other workers. Similarly, any map task or reduce task in progress on a failed worker is also reset to idle and becomes eligible for rescheduling.
+The master pings every worker periodically. If no response is received from a worker in a certain amount of time, the master marks the worker as failed. Any map tasks completed by the worker are reset back to their initial idle state, and therefore become eligible for scheduling on other workers. Similarly, any map task or reduce task in progress on a failed worker is also reset to idle and becomes eligible for rescheduling.
 
 
   * Master failure
@@ -74,7 +74,7 @@ Current implementation aborts the MapReduce computation if the master fails. Cli
 
   * Semantics in the Presence of Failures
 
-When the user-supplied map and reduce operators are de- terministic functions of their input values, our distributed implementation produces the same output as would have been produced by a non-faulting sequential execution of the entire program.
+When the user-supplied map and reduce operators are deterministic functions of their input values, our distributed implementation produces the same output as would have been produced by a non-faulting sequential execution of the entire program.
 MapReduce relies on atomic commits of map and reduce task outputs to achieve this property.
 
 
