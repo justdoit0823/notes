@@ -32,7 +32,7 @@ public class ClassReflection {
 	    Field fx = FooBar.class.getDeclaredField("x");
 	    fx.setAccessible(true);
 	    System.out.println(fx.get(testObj));
-	} catch (NoSuchFieldException|IllegalAccessException e) {
+	} catch (NoSuchFieldException | IllegalAccessException e) {
 	    System.out.println(e);
 	}
 
@@ -40,7 +40,7 @@ public class ClassReflection {
 	    Method ms = FooBar.class.getDeclaredMethod("showFooBar");
 	    ms.setAccessible(true);
 	    System.out.println(ms.invoke(testObj));
-	} catch (NoSuchMethodException|InvocationTargetException|IllegalAccessException e) {
+	} catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
 	    System.out.println(e);
 	}
 
