@@ -57,6 +57,26 @@ Read more detail at [Derivative](http://scipy.github.io/devdocs/generated/scipy.
 [Finite difference method](https://en.wikipedia.org/wiki/Finite_difference_method) is a wiki page about difference methods.
 
 
+Performance
+===========
+
+Paralle
+-------
+
+  * Use parallel primitives
+
+  * Write multithreaded or multiprocess code
+
+
+Read more detail at [Parallel Programming with numpy and scipy](https://scipy.github.io/old-wiki/pages/ParallelProgramming).
+
+
+BLAS
+----
+
+Read more detail at [Basic Linear Algebra Subprograms](https://en.wikipedia.org/wiki/Basic_Linear_Algebra_Subprograms).
+
+
 Reference
 ==========
 
@@ -69,3 +89,7 @@ Reference
   * <https://en.wikipedia.org/wiki/Finite_difference_method>
 
   * <http://scipy.github.io/devdocs/index.html>
+
+  * <https://scipy.github.io/old-wiki/pages/ParallelProgramming>
+
+  * <https://en.wikipedia.org/wiki/Basic_Linear_Algebra_Subprograms>
