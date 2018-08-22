@@ -71,6 +71,46 @@ Paralle
 Read more detail at [Parallel Programming with numpy and scipy](https://scipy.github.io/old-wiki/pages/ParallelProgramming).
 
 
+### Numpy parallel ###
+
+the relative macro definition,
+
+```c
+#if NPY_ALLOW_THREADS
+#define NPY_BEGIN_ALLOW_THREADS Py_BEGIN_ALLOW_THREADS
+#define NPY_END_ALLOW_THREADS Py_END_ALLOW_THREADS
+#define NPY_BEGIN_THREADS do {_save = PyEval_SaveThread();} while (0);
+#define NPY_END_THREADS   do { if (_save) \
+                { PyEval_RestoreThread(_save); _save = NULL;} } while (0);
+#define NPY_BEGIN_THREADS_THRESHOLDED(loop_size) do { if (loop_size > 500) \
+                { _save = PyEval_SaveThread();} } while (0);
+
+#define NPY_BEGIN_THREADS_DESCR(dtype) \
+        do {if (!(PyDataType_FLAGCHK(dtype, NPY_NEEDS_PYAPI))) \
+                NPY_BEGIN_THREADS;} while (0);
+
+#define NPY_END_THREADS_DESCR(dtype) \
+        do {if (!(PyDataType_FLAGCHK(dtype, NPY_NEEDS_PYAPI))) \
+                NPY_END_THREADS; } while (0);
+```
+
+the internal operation example,
+
+```c
+NPY_BEGIN_THREADS_DESCR(PyArray_DESCR(ap2));
+while (it1->index < it1->size) {
+	while (it2->index < it2->size) {
+		dot(it1->dataptr, is1, it2->dataptr, is2, op, l, NULL);
+		op += os;
+        PyArray_ITER_NEXT(it2);
+    }
+	PyArray_ITER_NEXT(it1);
+	PyArray_ITER_RESET(it2);
+}
+NPY_END_THREADS_DESCR(PyArray_DESCR(ap2));
+```
+
+
 BLAS
 ----
 
