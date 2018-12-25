@@ -47,7 +47,7 @@ public class ConcurrentMutateValidation {
       }
     }).collect(Collectors.toList());
 
-    System.out.println("mutated value:" + c.getValue());
+    System.out.println("success task num:" + ret.stream().filter(Boolean::booleanValue).count() + ", mutated value:" + c.getValue());
   }
 
   interface CounterOperator {
@@ -120,11 +120,13 @@ public class ConcurrentMutateValidation {
 
     public void run() {
 
-      while (!c.isStarted()) {
-        try {
-          c.wait();
-        } catch (Exception ignore) {
-
+      synchronized (c) {
+        while (!c.isStarted()) {
+          try {
+            c.wait();
+          } catch (Exception e) {
+            System.out.println(e);
+          }
         }
       }
 
