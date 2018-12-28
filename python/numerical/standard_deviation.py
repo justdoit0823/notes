@@ -12,12 +12,13 @@ _VERBOSE = False
 
 def cal_mean2std(m, x_mean, x_std, n, y_mean, y_std):
     z_mean = (m * x_mean + n * y_mean) / (m + n)
-    s1 = m * (x_std ** 2) + n * (y_std ** 2)
-    d1 = m * (x_mean ** 2) + n * (y_mean ** 2)
-    i1 = 2 * (m * (x_mean ** 2) + n * (y_mean ** 2))
-    m1 = z_mean ** 2 * (m + n)
-    i2 = 2 * (m * x_mean + n * y_mean) * z_mean
-    z_std = np.sqrt((s1 - d1 + i1 + m1 - i2) / (m + n))
+    x_square_sum = (x_std ** 2) * m + m * (x_mean ** 2)
+    y_square_sum = (y_std ** 2) * n + n * (y_mean ** 2)
+    z_square_sum = x_square_sum + y_square_sum
+
+    z_variance = z_square_sum - 2 * (m * x_mean + n * y_mean) * z_mean \
+        + (m + n) * (z_mean ** 2)
+    z_std = np.sqrt(z_variance / (m + n))
 
     return z_mean, z_std
 
@@ -41,8 +42,8 @@ def validate_cal_std():
         print('mean', ok_z_mean, z_mean)
         print('std', ok_z_std, z_std)
 
-    assert np.abs(z_mean - ok_z_mean) < 1e-8
-    assert np.abs(z_std - ok_z_std) < 1e-8
+    assert np.abs(z_mean - ok_z_mean) < 1e-10
+    assert np.abs(z_std - ok_z_std) < 1e-10
 
 
 def main():
