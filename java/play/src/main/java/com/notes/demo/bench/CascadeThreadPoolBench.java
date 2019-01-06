@@ -1,5 +1,8 @@
 package com.notes.demo.bench;
 
+import com.notes.demo.task.SimpleTaskResult;
+import com.notes.demo.task.TaskResult;
+import com.notes.demo.task.TaskRunner;
 import java.util.Queue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -28,19 +31,18 @@ public class CascadeThreadPoolBench {
 
   public static void run(int concurrence, final int num) {
 
-    ExecutorService executorService = Executors.newFixedThreadPool(concurrence);
     ExecutorService middleExecutor = Executors.newFixedThreadPool(concurrence * 7);
     ExecutorService outerExecutor = Executors.newFixedThreadPool(concurrence * 7);
-    List<Integer> testSequences = IntStream.rangeClosed(1, concurrence).boxed().collect(Collectors.toList());
 
-    List<Callable<Boolean>> tasks = testSequences.stream().map(i -> (Callable<Boolean>) () -> {
+    List<Callable<TaskResult<Boolean>>> tasks = IntStream.range(0, concurrence).boxed().map(i -> (Callable<TaskResult<Boolean>>) () -> {
       int testNum = num;
       int okNum = 0;
+      long startTs = System.nanoTime();
       List<Long> durations = new LinkedList<>();
       while (testNum-- > 0) {
-        long startTs = System.nanoTime();
+        long taskStartTs = System.nanoTime();
         boolean ok = false;
-        List<Future<Integer>> futures = IntStream.rangeClosed(1, 7).mapToObj(n -> middleExecutor.submit(() -> {
+        List<Future<Integer>> futures = IntStream.range(0, 7).mapToObj(n -> middleExecutor.submit(() -> {
           Future<Integer> future = outerExecutor.submit(() -> {
             try {
               Thread.sleep(5 + ThreadLocalRandom.current().nextInt(7));
@@ -84,22 +86,19 @@ public class CascadeThreadPoolBench {
         if (ok) {
           long stopTs = System.nanoTime();
           okNum++;
-          durations.add((stopTs - startTs) / 1000000);
+          durations.add((stopTs - taskStartTs) / 1000000);
         }
       }
 
       successNum.add(okNum);
       durations.forEach(durationQueue::offer);
-      return true;
+      return new SimpleTaskResult<>(true, (System.nanoTime() - startTs));
 
     }).collect(Collectors.toList());
 
     long startTs = System.nanoTime();
-    try {
-      executorService.invokeAll(tasks);
-    } catch (InterruptedException e) {
-      System.out.println(e);
-    }
+    TaskRunner<Boolean> taskRunner = new TaskRunner<>(tasks, concurrence);
+    taskRunner.run();
     long stopTs = System.nanoTime();
 
     List<Long> totalDurations = new LinkedList<>(durationQueue.stream().sorted().collect(Collectors.toList()));
@@ -107,6 +106,8 @@ public class CascadeThreadPoolBench {
     System.out.println("duration:" + (stopTs - startTs) / 1000000L + ", ok num:" + successNum.longValue());
     System.out.println("performance:" + "mean:" + totalDurations.stream().mapToLong(Long::longValue).sum() / successNum.longValue() + ",p90:" + totalDurations.get((int)(successNum.longValue() * 0.9)) + ", p99:" + totalDurations.get((int)(successNum.longValue() * 0.99)));
     System.out.println("durations" + totalDurations.subList(0, 10));
+
+    System.exit(0);
   }
 
 }

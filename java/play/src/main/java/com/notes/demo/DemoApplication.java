@@ -3,6 +3,7 @@ package com.notes.demo;
 import com.notes.demo.bench.CascadeThreadPoolBench;
 import com.notes.demo.bench.GuavaLoadingCacheBench;
 import com.notes.demo.bench.QueueDelayBench;
+import com.notes.demo.bench.TaskSwitchBench;
 import java.util.Arrays;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,6 +23,8 @@ public class DemoApplication {
       QueueDelayBench.main(testArgs);
     } else if (command.equals("CascadeThreadPoolBench")) {
       CascadeThreadPoolBench.main(testArgs);
+    } else if (command.equals("TaskSwitchBench")) {
+      TaskSwitchBench.main(testArgs);
     }
   }
 }

@@ -4,11 +4,12 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.cache.CacheBuilder;
 
+import com.notes.demo.task.SimpleTaskResult;
+import com.notes.demo.task.TaskResult;
+import com.notes.demo.task.TaskRunner;
 import java.util.Collections;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.List;
@@ -38,31 +39,23 @@ public class GuavaLoadingCacheBench {
     final int concurrence = Integer.parseInt(args[0]);
     final String operation = args[1];
 
-    ExecutorService executorService = Executors.newFixedThreadPool(concurrence);
-    List<Integer> testSequences = IntStream.rangeClosed(1, concurrence).boxed().collect(Collectors.toList());
-    List<Callable<Boolean>> tasks = Collections.emptyList();
+    List<Callable<TaskResult<Boolean>>> tasks = Collections.emptyList();
     if (operation.equals("read")) {
-      tasks = getReadTasks(uid, testSequences);
+      tasks = getReadTasks(uid, concurrence);
     } else if (operation.equals("write")) {
-      tasks = getWriteTasks(uid, testSequences);
+      tasks = getWriteTasks(uid, concurrence);
     }
 
-    long startTs = System.nanoTime();
-    try {
-      executorService.invokeAll(tasks);
-    } catch (InterruptedException e) {
-      System.out.println(e);
-    }
-    long stopTs = System.nanoTime();
+    TaskRunner<Boolean> taskRunner = new TaskRunner<>(tasks, concurrence);
+    taskRunner.run();
 
-    final long duraton = (stopTs - startTs) / 1000000L;
-    System.out.println(operation + " concurrence:" + concurrence + ", duration:" + duraton + ", ops:" + concurrence * 5000 / (duraton / 1000.0));
     System.exit(0);
   }
 
-  private static List<Callable<Boolean>> getReadTasks(int uid, List<Integer> testSequences) {
-    return testSequences.stream().map((i) -> (Callable<Boolean>) () -> {
+  private static List<Callable<TaskResult<Boolean>>> getReadTasks(int uid, int taskNum) {
+    return IntStream.range(0, taskNum).boxed().map((i) -> (Callable<TaskResult<Boolean>>) () -> {
       int num  = 5000;
+      long startTs = System.nanoTime();
       while (num-- > 0) {
         try {
           localCache.get(uid);
@@ -70,17 +63,22 @@ public class GuavaLoadingCacheBench {
           System.out.println(e);
         }
       }
-      return true;
+
+      long stopTs = System.nanoTime();
+      return new SimpleTaskResult<>(true, (stopTs - startTs));
     }).collect(Collectors.toList());
   }
 
-  private static List<Callable<Boolean>> getWriteTasks(int uid, List<Integer> testSequences) {
-    return testSequences.stream().map((i) -> (Callable<Boolean>) () -> {
+  private static List<Callable<TaskResult<Boolean>>> getWriteTasks(int uid, int taskNum) {
+    return IntStream.range(0, taskNum).boxed().map((i) -> (Callable<TaskResult<Boolean>>) () -> {
       int num = 50000;
+      long startTs = System.nanoTime();
       while (num-- > 0) {
         localCache.put(uid + i, 112312312);
       }
-      return true;
+
+      long stopTs = System.nanoTime();
+      return new SimpleTaskResult<>(true, (stopTs - startTs));
     }).collect(Collectors.toList());
   }
 }
