@@ -1,4 +1,4 @@
-package com.notes.demo.validation;
+package com.notes.demo.concurrence;
 
 import java.util.List;
 import java.util.stream.Collectors;
