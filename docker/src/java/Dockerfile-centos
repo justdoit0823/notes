@@ -1,0 +1,21 @@
+
+FROM centos:7
+
+LABEL maintainer="justdoit920823@gmail.com"
+
+RUN yum install -y wget nc
+
+COPY jdk-8u211-linux-x64.rpm /tmp/
+RUN cd /tmp && \
+    yum localinstall -y jdk-8u211-linux-x64.rpm && \
+    rm -f jdk-8u211-linux-x64.rpm
+
+RUN mkdir /app/ /app/lib
+VOLUME /app
+
+RUN yum install -y git make gcc-c++ && \
+    cd /tmp && git clone https://github.com/dcapwell/lightweight-java-profiler.git && \
+    cd lightweight-java-profiler && JAVA_HOME=/usr/java/jdk1.8.0_211-amd64/ make all && \
+    cd ~ && cp /tmp/lightweight-java-profiler/build-64/liblagent.so /app/lib && rm -rf /tmp/lightweight-java-profiler
+
+ENTRYPOINT ["java"]
