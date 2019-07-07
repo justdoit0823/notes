@@ -16,7 +16,7 @@ void * worker_task(void * arg) {
 int main(int argc, char * argv[]) {
   Py_Initialize();
 
-  const char * path = "/usr/local/opt/python/Frameworks/Python.framework/Versions/3.7/lib/python3.7/config-3.7m-darwin/libpython3.7.a";
+  const char * path = "libpython3.7m.a";
   void * handle = dlopen(path, RTLD_LAZY | RTLD_GLOBAL);
   if (handle == NULL) {
     printf("load failed.\n");
