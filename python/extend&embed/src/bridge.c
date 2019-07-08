@@ -16,7 +16,12 @@ void * worker_task(void * arg) {
 int main(int argc, char * argv[]) {
   Py_Initialize();
 
+  #ifdef __linux
+  const char * path = "libpython3.7m.so";
+  #elif
   const char * path = "libpython3.7m.a";
+  #endif
+
   void * handle = dlopen(path, RTLD_LAZY | RTLD_GLOBAL);
   if (handle == NULL) {
     printf("load failed.\n");
@@ -66,6 +71,7 @@ int main(int argc, char * argv[]) {
 
   pthread_t task;
   pthread_create(&task, NULL, worker_task, NULL);
+  pthread_join(task, NULL);
 
   if (Py_FinalizeEx() < 0) {
     exit(120);
