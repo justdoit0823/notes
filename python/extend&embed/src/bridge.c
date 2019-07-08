@@ -18,7 +18,7 @@ int main(int argc, char * argv[]) {
 
   #ifdef __linux
   const char * path = "libpython3.7m.so";
-  #elif
+  #else
   const char * path = "libpython3.7m.a";
   #endif
 
