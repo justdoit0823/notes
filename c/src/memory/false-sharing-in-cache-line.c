@@ -7,14 +7,15 @@
 typedef struct cache_aligned {
 
   unsigned long cnt_a;
-  unsigned long cnt_b;
+  char cnt_padding[56];
+  unsigned int cnt_b;
 
 } c_aligned_t;
 
 
 typedef struct cache_unaligned {
 
-  unsigned int cnt_a;
+  unsigned long cnt_a;
   unsigned int cnt_b;
 
 } c_unaligned_t;
@@ -35,6 +36,7 @@ typedef void * (* foo_thread_func) (void *);
 void * aligned_foo(void * args){
   t_param * t_args = (t_param *)args;
   c_aligned_t * ptr = (c_aligned_t *)t_args->ptr;
+
   unsigned long num = t_args->num;
   unsigned int field = t_args->field;
   unsigned long sum = 0;
@@ -45,15 +47,14 @@ void * aligned_foo(void * args){
   else while(num-- > 0) sum += ptr->cnt_b;
 
   printf("finish field %d.\n", field);
-
   return NULL;
-
 }
 
 
 void * unaligned_foo(void * args){
   t_param * t_args = (t_param *)args;
   c_unaligned_t * ptr = (c_unaligned_t *)t_args->ptr;
+
   unsigned long num = t_args->num;
   unsigned int field = t_args->field;
   unsigned long sum = 0;
@@ -64,83 +65,74 @@ void * unaligned_foo(void * args){
   else while(num-- > 0) sum += ptr->cnt_b;
 
   printf("finish field %d.\n", field);
-
   return NULL;
-
 }
 
 
 int main(int argc, char * argv[]){
-
-  pthread_t tid1, tid2;
   foo_thread_func thread_routine;
-  t_param param1, param2;
-  unsigned long num, aligned = 0;
+  pthread_t threads[2];
+  t_param params[2];
+
+  unsigned long num = 100000, aligned = 0;
   int t_ret, j_ret;
-  c_aligned_t a_data;
-  c_unaligned_t u_data;
 
   if(argc < 2){
     printf("operation num is missing.\n");
     return 0;
   }
   num = atol(argv[1]);
+
   if(argc > 2) aligned = atoi(argv[2]);
   printf("num %ld, aligned %ld.\n", num, aligned);
 
-  printf("unsigned long size is %ld, and unsigned int size is %ld.\n", sizeof(unsigned long), sizeof(unsigned int));
-
   if(aligned){
+    c_aligned_t a_data;
+
     a_data.cnt_a = 0;
     a_data.cnt_b = 1;
 
-    param1.ptr = &a_data;
-    param1.num = num;
-    param1.field = 1;
-
-    param2.ptr = &a_data;
-    param2.num = num;
-    param2.field = 2;
+    for (int i = 0; i < 2; i++) {
+      params[i].ptr = &a_data;
+      params[i].num = num;
+      params[i].field = i + 1;
+    }
 
     thread_routine = aligned_foo;
+
     printf("runing aligned cace line test.\n");
   }
   else{
+    c_unaligned_t u_data;
+
     u_data.cnt_a = 0;
     u_data.cnt_b = 1;
 
-    param1.ptr = &u_data;
-    param1.num = num;
-    param1.field = 1;
-
-    param2.ptr = &u_data;
-    param2.num = num;
-    param2.field = 2;
+    for (int i = 0; i < 2; i++) {
+      params[i].ptr = &u_data;
+      params[i].num = num;
+      params[i].field = i + 1;
+    } 
 
     thread_routine = unaligned_foo;
+
     printf("runing unaligned cace line test.\n");
   }
 
-  t_ret = pthread_create(&tid1, NULL, thread_routine, &param1);
-  if(t_ret != 0){
-    printf("create thread failed.\n");
-    return 0;
-  }
-  t_ret = pthread_create(&tid2, NULL, thread_routine, &param2);
-  if(t_ret != 0){
-    printf("create thread failed.\n");
-    return 0;
+  for(int i = 0; i < 2; i++) {
+    t_ret = pthread_create(&threads[i], NULL, thread_routine, &params[i]);
+    if(t_ret != 0){
+      printf("create thread failed.\n");
+      return 0;
+    }
   }
 
   void * ret;
+  for(int i = 0; i < 2; i++) {
+    j_ret = pthread_join(threads[i], &ret);
+    if(j_ret != 0) printf("create thread failed.\n");
+  }
 
-  j_ret = pthread_join(tid1, &ret);
-  if(j_ret != 0) printf("create thread failed.\n");
-  j_ret = pthread_join(tid2, &ret);
-  if(j_ret != 0) printf("create thread failed.\n");
-
-  printf("finish test.\n");
-
+  printf("test done.\n");
   return 0;
-
 }
