@@ -2,6 +2,7 @@ package com.notes.demo;
 
 import com.notes.demo.bench.CascadeThreadPoolBench;
 import com.notes.demo.bench.GuavaLoadingCacheBench;
+import com.notes.demo.bench.GuavaLoadingCacheExceptionBench;
 import com.notes.demo.bench.QueueDelayBench;
 import com.notes.demo.bench.TaskSwitchBench;
 import java.util.Arrays;
@@ -19,6 +20,8 @@ public class DemoApplication {
     String[] testArgs = Arrays.asList(args).subList(1, args.length).toArray(i);
     if (command.equals("GuavaLoadingCacheBench")) {
       GuavaLoadingCacheBench.main(testArgs);
+    } else if (command.equals("GuavaLoadingCacheExceptionCacheBench")) {
+      GuavaLoadingCacheExceptionBench.main(testArgs);
     } else if (command.equals("QueueDelayBench")) {
       QueueDelayBench.main(testArgs);
     } else if (command.equals("CascadeThreadPoolBench")) {
