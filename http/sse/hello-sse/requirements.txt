@@ -3,4 +3,4 @@ aiohttp==3.1.2
 click==6.7
 aiohttp-jinja2==1.0.0
 aiohttp_sse==2.0.0
-jinja2==2.10.1
+jinja2==2.11.3
